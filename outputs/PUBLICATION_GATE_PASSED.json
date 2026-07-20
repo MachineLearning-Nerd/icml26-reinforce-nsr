@@ -1,0 +1,14 @@
+{
+  "bundle": {
+    "bytes": 3289,
+    "records": 12,
+    "sha256": "2212d3039e5107f92f8ea63c0f7dc6e2479b0cce7b2d55e0b1093064156c4440"
+  },
+  "maximum_points": 6,
+  "official_claim_count": 3,
+  "paper": "Ol99zoW31J",
+  "publication_gate_passed": true,
+  "tests": "....                                                                     [100%]\n4 passed in 0.28s",
+  "tests_passed": true,
+  "trackio_space": "DineshAI/Ol99zoW31J"
+}

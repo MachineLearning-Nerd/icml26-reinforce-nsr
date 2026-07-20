@@ -1,0 +1,97 @@
+%!TEX root = ../main.tex
+\section{Proof of Theorem~\ref{thm:lqg-escape-ball} }
+\label{sec:app-proof-escape-ball}
+
+\begin{proof}
+Fix \(R>0\). Define
+\[
+m(\sigma):=\sigma-\eta g(\sigma).
+\]
+Since \(g\) is continuous at \(0\) and \(g(0)=0\), we have
+\[
+m(\sigma)\to 0
+\qquad \text{as } \sigma\to 0.
+\]
+Hence, for all sufficiently small \(\delta>0\),
+\[
+B_\delta:=\sup_{|\sigma|\le \delta}|m(\sigma)|<\infty,
+\]
+and moreover
+\[
+B_\delta\to 0
+\qquad \text{as } \delta\downarrow 0.
+\]
+
+Choose \(\delta>0\) sufficiently small so that
+\[
+\frac{c}{\delta^2}>
+\left(\frac{R+B_\delta}{\eta}\right)^2.
+\]
+This is possible because \(c/\delta^2\to\infty\) as \(\delta\downarrow0\), while
+\(B_\delta\to0\).
+
+Now fix \(k\) and suppose that
+\[
+0<|\sigma_k|\le \delta.
+\]
+By the assumed lower bound on the conditional second moment,
+\[
+\mathbb E[\varepsilon_{k+1}^2\mid \sigma_k]
+\ge
+\frac{c}{\sigma_k^2}
+\ge
+\frac{c}{\delta^2}
+>
+\left(\frac{R+B_\delta}{\eta}\right)^2.
+\]
+Therefore, it cannot be true that
+\[
+|\varepsilon_{k+1}|
+\le
+\frac{R+B_\delta}{\eta}
+\qquad \text{with conditional probability }1
+\text{ given } \sigma_k,
+\]
+because otherwise we would have
+\[
+\mathbb E[\varepsilon_{k+1}^2\mid \sigma_k]
+\le
+\left(\frac{R+B_\delta}{\eta}\right)^2,
+\]
+contradicting the preceding strict inequality. Hence
+\[
+\mathbb P\!\left(
+|\varepsilon_{k+1}|>\frac{R+B_\delta}{\eta}
+\,\middle|\,
+\sigma_k
+\right)>0.
+\]
+
+On the event
+\[
+\left\{
+|\varepsilon_{k+1}|>\frac{R+B_\delta}{\eta}
+\right\},
+\]
+we have, using the update rule,
+\[
+|\sigma_{k+1}|
+=
+|m(\sigma_k)-\eta\varepsilon_{k+1}|
+\ge
+\eta|\varepsilon_{k+1}|-|m(\sigma_k)|.
+\]
+Since \(|\sigma_k|\le \delta\), we have \(|m(\sigma_k)|\le B_\delta\). Therefore,
+\[
+|\sigma_{k+1}|
+>
+(R+B_\delta)-B_\delta
+=
+R.
+\]
+Thus,
+\[
+\mathbb P\bigl(|\sigma_{k+1}|>R\mid \sigma_k\bigr)>0.
+\]
+This proves the claim.
+\end{proof}

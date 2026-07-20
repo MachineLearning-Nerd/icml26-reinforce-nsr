@@ -1,0 +1,59 @@
+%!TEX root = ../main.tex
+\vspace{-2mm}
+\section{Nonlinear Systems, Generic Feedback}
+\label{sec:nonlinear_new}
+
+We now consider generic nonlinear dynamics and policies:
+\begin{align}\label{eq:nonlinear-dynamics-reward}
+s_{t+1}\!=f(s_t,a_t),~~a_t\!=\mu_\theta(s_t) + \varepsilon_t,~~
+  \varepsilon_t \sim \mathcal N(0,\Sigma).\!\!
+\end{align}
+In this nonlinear setting, $\widehat G=g(\xi)$ is a nonlinear function of Gaussian noise, so NSR depends on expectations
+$\E[g(\xi)]$ and $\E[g(\xi)^2]$, which are generally intractable Gaussian integrals. This is the same issue that arises in nonlinear estimation where even computing moments of a nonlinear transformation of a Gaussian is difficult~\cite{julier04proceedings-nonlinearestimation}. Therefore, we focus on providing upper bounds.
+
+\begin{theorem}[Upper bounds for generic nonlinear systems]
+\label{thm:nonlinear-bound}
+The REINFORCE estimators for \eqref{eq:nonlinear-dynamics-reward} are
+\begin{align}
+\widehat G_\theta(\tau)
+&:= R(\tau)\sum_{t=0}^{T-1} J_\theta(s_t)^\top \Sigma^{-1}\varepsilon_t,
+\label{eq:gtheta_def}\\
+\widehat G_\ell(\tau)
+&:= R(\tau)\sum_{t=0}^{T-1}\Big( \Sigma^{-1}(\varepsilon_t\odot\varepsilon_t) - \mathbf 1\Big),
+\label{eq:gell_def}
+\end{align}
+Assume the following conditional moments are finite:
+\[
+\mathbb E\!\left[R(\tau)^4\,\middle|\, s_0\right]<\infty,
+~~
+\mathbb E\!\left[\|J_\theta(s_t)\|_{\mathrm{F}}^4\,\middle|\, s_0\right]<\infty\quad \forall t, s_0.
+\]
+Then the following bounds hold:
+
+\textbf{(i) Mean-parameter gradient.}
+\begin{align}
+\label{eq:E2_theta}
+&\mathbb E\!\left[\|\widehat G_\theta(\tau)\|_2^2 \,\middle|\, s_0\right]
+\le
+T\,\|\Sigma^{-1}\|_2^2\;
+\sqrt{\mathbb E\!\left[R(\tau)^4\,\middle|\, s_0\right]}\;\notag \\
+&\sqrt{(\operatorname{tr}\Sigma)^2 + 2\,\operatorname{tr}(\Sigma^2)}\;\sum_{t=0}^{T-1} \sqrt{\mathbb E\!\left[\|J_\theta(s_t)\|_{\mathrm{F}}^4\,\middle|\, s_0\right]}.
+\end{align}
+\textbf{(ii) Log-std gradient.}
+\begin{align}
+\label{eq:E2_ell}
+\mathbb E\!\left[\|\widehat G_\ell(\tau)\|_2^2 \,\middle|\, s_0\right]
+\le
+C\sqrt{\mathbb E\!\left[R(\tau)^4\,\middle|\, s_0\right]}.
+\end{align}
+where $C$ is a constant depends on the system.
+\vspace{-2mm}
+\end{theorem}
+Theorem~\ref{thm:nonlinear-bound} upper-bounds the variance of the REINFORCE estimator in generic nonlinear systems in terms of the return's fourth moment and the Jacobian of the policy mean. The bounds are conditioned on the initial state $s_0$, which can be removed by taking expectation \wrt $s_0$. This reveals a few important factors:
+
+\textbf{Policy covariance $\Sigma$.} The mean-parameter gradient variance scales with $\|\Sigma^{-1}\|_2^2\sqrt{(\operatorname{tr}\Sigma)^2 + 2\,\operatorname{tr}(\Sigma^2)}$, which scales as $O(\sigma^{-2})$ when $\Sigma=\sigma^2 I$. This agrees with the intuition that smaller exploration noise leads to higher variance.
+
+\textbf{Jacobian $J_\theta(s_t)$.} More sensitive policies (larger Jacobians) lead to higher gradient-estimation variance. In particular, optimal controllers in physical systems are often ``bang-bang'' (\eg pendulum and acrobot), corresponding to sharp state-to-action changes and potentially large Jacobians~\cite{aastrom00pendulum-bangbang, han24l4dc-pendulum}.
+
+
+\textbf{Experiments.} We plot the NSR and objective along Adam optimization trajectories for LQR with a multi-layer perceptron (MLP) policy and for the inverted pendulum problem with an MLP policy in Figure~\ref{fig:nonlinear-traj}. We make two observations: (i) the NSR increases as the optimizer approaches the optimum; and (ii) near the optimum, the objective and NSR exhibit coupled fluctuations (highlighted in red). This suggests that once the optimizer enters a neighborhood of the optimum, the NSR increases and thus leads to unreliable gradient estimates that cause objective drops. We also observe similar coupled fluctuations in the MuJoCo Hopper and HalfCheetah environments (Figure~\ref{fig:mujoco_collapse} in Appendix~\ref{sec:app-add-experiments}), suggesting that high-NSR regimes are associated with instability in policy optimization across different systems.

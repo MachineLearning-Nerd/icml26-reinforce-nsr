@@ -1,0 +1,311 @@
+%!TEX root = ../main.tex
+\section{Proof of Theorem \ref{thm:lqg-variance-one-step}}
+\label{sec:app-proof-lqg-variance-one-step}
+
+We begin with a lemma that computes expectations of certain polynomial functions of Gaussian random variables.
+While such identities are broadly covered by Isserlis' theorem (Wick's formula), those results mainly provide
+expressions for generic even-order moments. In our analysis, we require more structured, problem-specific forms.
+Magnus~\cite{magnus78report-gaussianmoments} derives formulas for expectations of products of quadratic forms of the type
+$\mathbb{E}\!\left[\prod_{i=1}^{N}\big(u^\top A_i u\big)\right]$.
+Our setting involves a non-homogeneous polynomial, hence we state the following lemma.
+
+\begin{lemma}\label{thm:wz_std_lemma}
+For $\xi\sim \mathcal N(0,I_m)$, define
+\[
+w(\xi):=\sum_{i=1}^m (\xi_i^2-1)^2.
+\]
+Then for any $u\in\mathbb R^m$ and any $M\in \sym{m}$,
+\begin{align}
+\E[w(\xi)] &= 2m, \label{eq:w0}\\
+\E\big[w(\xi)\,(\xi^\top u)^2\big] &= (2m+8)\,\|u\|^2, \label{eq:w_u}\\
+\E\big[w(\xi)\,(\xi^\top M \xi)\big] &= (2m+8)\,\tr M, \label{eq:w_M}\\
+\E\big[w(\xi)\,(\xi^\top M \xi)^2\big]
+&= (4m + 32)\,\tr(M^2) + (2m + 16)\,(\tr M)^2 + 24 \sum_{i=1}^m M_{ii}^2.
+\label{eq:w_MM}
+\end{align}
+\end{lemma}
+
+\begin{proof}
+To prove \eqref{eq:w0}, use $\E[\xi^8]=105,\,\E[\xi^6]=15,\,\E[\xi^4]=3,\,\E[\xi^2]=1$:
+\[
+\E[w(\xi)] = \sum_{i=1}^m \E[(\xi_i^2-1)^2] = \sum_{i=1}^m (3 - 2 + 1) = 2m.
+\]
+
+For \eqref{eq:w_u}, expand and note that cross terms with $u_i u_j$ $(i\neq j)$ vanish by odd-moment cancellation,
+so only $u_i^2$ terms remain:
+\[
+\E\big[w(\xi)(\xi^\top u)^2\big]
+= \sum_{i=1}^m \sum_{j=1}^m \E\big[(\xi_i^2-1)^2 \xi_j^2\big]\, u_j^2.
+\]
+Compute
+\[
+\E\big[(\xi_1^2-1)^2 \xi_1^2\big]=\E[\xi_1^6]-2\E[\xi_1^4]+\E[\xi_1^2]=15-6+1=10,
+\qquad
+\E\big[(\xi_i^2-1)^2 \xi_1^2\big]=2\ (i\neq 1),
+\]
+hence $\E[w(\xi)(\xi^\top u)^2]=\|u\|^2(10+2(m-1))=(2m+8)\|u\|^2$.
+
+For \eqref{eq:w_M}, similarly only diagonal entries contribute:
+\[
+\E[w(\xi)(\xi^\top M \xi)]
+= \sum_{i=1}^m\sum_{j=1}^m \E[(\xi_i^2-1)^2\xi_j^2]\, M_{jj}
+= (2(m-1)+10)\tr M
+= (2m+8)\tr M.
+\]
+
+For \eqref{eq:w_MM}, expand the quadratic form as
+\[
+(z^\top M z)^2=\sum_{i,j,k,l=1}^m M_{ij}M_{kl}\,z_i z_j z_k z_l.
+\]
+After cancelling the odd terms, only two index patterns contribute: (i) $i=j$ and $k=l$ (diagonal--diagonal terms), and (ii) $\{i,j\}=\{k,l\}$ with $i\neq j$ (off-diagonal pairings), yielding
+\[
+(z^\top M z)^2
+=\sum_{i,k} M_{ii}M_{kk}\,z_i^2 z_k^2
+\;+\;
+2\sum_{i<j} M_{ij}^2\,z_i^2 z_j^2
+\;+\;(\text{terms with vanishing expectation}).
+\]
+We then evaluate $\E[w(z)z_i^2 z_k^2]$ by splitting into the cases $i=k$ and $i\neq k$ and using the one-dimensional moments
+$\E[z^2]=1,\E[z^4]=3,\E[z^6]=15,\E[z^8]=105$, which gives
+\[
+\E[w(z)\,z_i^4]=\E[(z_i^2-1)^2 z_i^4]+(m-1)\E[(z_1^2-1)^2]\E[z_i^4]=78+6(m-1),
+\]
+\[
+\E[w(z)\,z_i^2 z_k^2]=\E[(z_i^2-1)^2 z_i^2]\E[z_k^2]+\E[(z_k^2-1)^2 z_k^2]\E[z_i^2]+(m-2)\E[(z_1^2-1)^2]\E[z_i^2]\E[z_k^2]
+=20+2(m-2),
+\quad (i\neq k),
+\]
+and similarly
+\[
+\E[w(z)\,z_i^2 z_j^2]=2m+16\qquad (i\neq j).
+\]
+Substituting these values into the diagonal--diagonal and off-diagonal contributions and collecting terms yields
+\[
+\E \big[w(z)\,(z^\top M z)^2\big]
+= (4m + 32)\,\tr(M^2) + (2m + 16)\,(\tr M)^2 + 24\sum_{i=1}^m M_{ii}^2,
+\]
+concluding the proof.
+\end{proof}
+
+Next we prove Theorem~\ref{thm:lqg-variance-one-step}.
+
+\begin{proof}
+\textbf{Proof of $K$ part.}
+Using
+\[
+s_1 = F s_0 + B\varepsilon_0,\quad
+a_0 = K s_0 + \varepsilon_0,\quad
+r_0 =-\big(s_1^\top Q_s s_1+a_0^\top Q_a a_0\big),
+\]
+we can expand $r_0$ as
+\[
+r_0 = -(x + 2y + z),
+\]
+where
+\begin{align}\label{eq:lqr-decompose-r0}
+x := s_0^\top M_{ss} s_0,\quad
+y := s_0^\top M_{se}\varepsilon_0,\quad
+z := \varepsilon_0^\top M_{ee}\varepsilon_0,
+\end{align}
+and
+\[
+M_{ss}:=F^\top Q_sF+K^\top Q_a K,\quad
+M_{se}:=F^\top Q_sB+K^\top Q_a,\quad
+M_{ee}:=B^\top Q_s B+Q_a.
+\]
+Note $M_{ss}, M_{ee}$ are symmetric and positive semidefinite. The REINFORCE estimator is
+\[
+\widehat G_K = \nabla_K\log\pi(a_0\mid s_0)\,r_0
+= \Sigma^{-1}\varepsilon_0 s_0^\top\, (-(x+2y+z)).
+\]
+Since $x$ depends only on $s_0$ and $z$ depends only on $\varepsilon_0$, and $s_0\perp\!\!\!\perp \varepsilon_0$ with
+$\E[\varepsilon_0]=0$, only the $y$ term remains in expectation:
+\[
+\E[\widehat G_K]
+=
+\E\!\left[\Sigma^{-1}\varepsilon_0 s_0^\top (-2y)\right]
+= -2\,\Sigma^{-1}\E[\varepsilon_0\varepsilon_0^\top]\,M_{se}^\top \E[s_0 s_0^\top]
+= -2\,M_{se}^\top \Sigma_0
+= -2\,(Q_aK+B^\top Q_sF)\Sigma_0.
+\]
+
+For the second moment, using $\|AB\|_{\mathrm{F}}^2=\tr(B^\top A^\top A B)$,
+\[
+\|\widehat G_K\|_{\mathrm{F}}^2
+= (\varepsilon_0^\top \Sigma^{-2} \varepsilon_0)\,(s_0^\top s_0)\,(x+2y+z)^2.
+\]
+By independence and odd-moment cancellation,
+\[
+\E\big[\|\widehat G_K\|_{\mathrm{F}}^2\big]
+=
+\E\Big[(\varepsilon_0^\top \Sigma^{-2} \varepsilon_0)\,(s_0^\top s_0)\,(x^2 + z^2 + 2xz + 4y^2)\Big]
+=
+E_{1,K}+E_{2,K}+E_{3,K}+E_{4,K},
+\]
+with
+\begin{align*}
+E_{1,K} &:= \E[\varepsilon_0^\top \Sigma^{-2} \varepsilon_0]\;\E\big[(s_0^\top s_0)\,x^2\big],\\
+E_{2,K} &:= \E[s_0^\top s_0]\;\E\big[(\varepsilon_0^\top \Sigma^{-2} \varepsilon_0)\,z^2\big],\\
+E_{3,K} &:= 2\,\E\big[(s_0^\top s_0)\,x\big]\;\E\big[(\varepsilon_0^\top \Sigma^{-2} \varepsilon_0)\,z\big],\\
+E_{4,K} &:= 4\,\E\!\left[(s_0^\top s_0)\,\E\!\left[(\varepsilon_0^\top \Sigma^{-2} \varepsilon_0)\,y^2\,\middle|\,s_0\right]\right].
+\end{align*}
+We rewrite each term using Lemma~\ref{lem:IS_shorthand}. First,
+\[
+\E[\varepsilon_0^\top \Sigma^{-2}\varepsilon_0]
+=\mathrm{IS}_{\Sigma}\big(\Sigma^{-2}\big),
+\qquad
+\E[s_0^\top s_0]=\mathrm{IS}_{\Sigma_0}(I_n).
+\]
+Also,
+\[
+\E[(s_0^\top s_0)x^2]
+=
+\mathrm{IS}_{\Sigma_0}\!\big(I_n,M_{ss},M_{ss}\big),
+\qquad
+\E[(s_0^\top s_0)x]
+=
+\mathrm{IS}_{\Sigma_0}\!\big(I_n,M_{ss}\big),
+\]
+and since $z=\varepsilon_0^\top M_{ee}\varepsilon_0$,
+\[
+\E\big[(\varepsilon_0^\top \Sigma^{-2}\varepsilon_0)\,z\big]
+=
+\mathrm{IS}_{\Sigma}\big(\Sigma^{-2},M_{ee}\big),
+\qquad
+\E\big[(\varepsilon_0^\top \Sigma^{-2}\varepsilon_0)\,z^2\big]
+=
+\mathrm{IS}_{\Sigma}\big(\Sigma^{-2},M_{ee},M_{ee}\big).
+\]
+
+It remains to compute $E_{4,K}$. Since $y=s_0^\top M_{se}\varepsilon_0$,
+\[
+y^2=\varepsilon_0^\top X(s_0)\varepsilon_0,
+\qquad
+X(s_0):=M_{se}^\top s_0 s_0^\top M_{se}.
+\]
+Conditioning on $s_0$ and applying Lemma~\ref{lem:IS_shorthand} with $k=2$,
+\[
+\E_{\varepsilon_0}\!\left[
+(\varepsilon_0^\top \Sigma^{-2}\varepsilon_0)\,y^2
+\;\middle|\;s_0\right]
+=
+\mathrm{IS}_{\Sigma}\big(\Sigma^{-2},X(s_0)\big)
+=
+\tr(\Sigma\Sigma^{-2})\tr(\Sigma X(s_0))
++2\,\tr(\Sigma\Sigma^{-2}\Sigma X(s_0)).
+\]
+Using $\tr(\Sigma\Sigma^{-2})=\mathrm{IS}_{\Sigma}(\Sigma^{-2})$ and $\Sigma\Sigma^{-2}\Sigma=I$, and defining
+\[
+U := M_{se}M_{se}^\top,\qquad
+V := M_{se}\Sigma M_{se}^\top,
+\]
+we have
+\[
+\tr\big(X(s_0)\big) = s_0^\top U s_0,
+\qquad
+\tr\big(\Sigma X(s_0)\big) = s_0^\top V s_0.
+\]
+Therefore,
+\[
+\E_{\varepsilon_0}\!\left[
+(\varepsilon_0^\top \Sigma^{-2}\varepsilon_0)\,y^2
+\;\middle|\;s_0\right]
+=
+\mathrm{IS}_{\Sigma}\big(\Sigma^{-2}\big)\,(s_0^\top V s_0)
++2\,(s_0^\top U s_0).
+\]
+Multiplying by $(s_0^\top s_0)=(s_0^\top I_n s_0)$ and taking expectation over $s_0$ gives
+\[
+E_{4,K}
+=
+4\Big(
+\mathrm{IS}_{\Sigma}\big(\Sigma^{-2}\big)\;
+\mathrm{IS}_{\Sigma_0}\big(I_n,V\big)
++
+2\,\mathrm{IS}_{\Sigma_0}\big(I_n,U\big)
+\Big).
+\]
+
+\medskip
+\textbf{Proof of log-std part.}
+Write $\varepsilon_0=\Sigma^{1/2}\xi$ with
+$\xi\sim\mathcal N(0,I_m)$ and define
+\[
+q := \Sigma^{-1}(\varepsilon_0\odot \varepsilon_0) - \mathbf 1
+= \xi\odot\xi-\mathbf 1,
+\qquad
+S:=\Sigma^{1/2}M_{ee}\Sigma^{1/2}.
+\]
+Since $s_0$ and $\varepsilon_0$ are independent,
+\[
+\E[\widehat G_\ell]
+= \E[q\,r_0]
+= -\,\E[q\,z],
+\qquad
+z=\varepsilon_0^\top M_{ee}\varepsilon_0=\xi^\top S\xi.
+\]
+For the $i$-th component,
+\[
+\big[\E(q\,z)\big]_i
+= \sum_{j,k} S_{jk}\,\E\big[(\xi_i^2-1)\,\xi_j\xi_k\big].
+\]
+By independence,
+\[
+\E\big[(\xi_i^2-1)\,\xi_j\xi_k\big]
+=\begin{cases}
+\E[\xi_i^4-\xi_i^2]=3-1=2, & j=k=i,\\
+0, & \text{otherwise},
+\end{cases}
+\]
+so $\big[\E(q\,z)\big]_i = 2\,S_{ii}$ and hence
+\[
+\E[\widehat G_\ell]
+= -2\,\operatorname{diag}(S)
+= -2\,\operatorname{diag}\!\big(\Sigma^{1/2}M_{ee}\Sigma^{1/2}\big)
+= -2\,\operatorname{diag}\!\big(\Sigma M_{ee}\big),
+\]
+where the last equality uses that $\Sigma$ is diagonal. 
+
+For the second moment, $\widehat G_\ell = q\,r_0$ and $r_0^2=(x+2y+z)^2$.
+Using independence and odd-moment cancellation,
+\begin{align*}
+\E\big[\|\widehat G_\ell\|_2^2\big]
+&= \E\big[\|q\|_2^2\big]\;\E[x^2]
++ \E\big[\|q\|_2^2 z^2\big]
++ 2\,\E[x]\;\E\big[\|q\|_2^2 z\big]
++ 4\,\E\big[\|q\|_2^2 y^2\big].
+\end{align*}
+The $x$-moments follow from Lemma~\ref{lem:IS_shorthand}:
+\[
+x=s_0^\top M_{ss}\,s_0,
+\qquad
+\E[x]=\mathrm{IS}_{\Sigma_0}\!\big(M_{ss}\big),
+\qquad
+\E[x^2]=\mathrm{IS}_{\Sigma_0}\big(M_{ss},M_{ss}\big).
+\]
+For the $\varepsilon_0$-moments, $z=\xi^\top S\xi$ and $\|q\|_2^2=\sum_{i=1}^m(\xi_i^2-1)^2=w(\xi)$, so Lemma~\ref{thm:wz_std_lemma} gives
+\[
+\E[\|q\|_2^2]=2m,\qquad
+\E[\|q\|_2^2 z]=(2m+8)\tr(S),
+\]
+\[
+\E[\|q\|_2^2 z^2]
+=(2m + 16)\,\tr(S)^2+(4m+32)\,\tr(S^2) + 24 \sum_{i=1}^m S_{ii}^2.
+\]
+Finally, for $y=s_0^\top M_{se}\varepsilon_0=s_0^\top M_{se}\Sigma^{1/2}\xi$, define
+\[
+u(s_0):=\Sigma^{1/2}M_{se}^\top s_0\in\mathbb R^m,
+\qquad
+y=u(s_0)^\top \xi.
+\]
+Then $y^2=(u(s_0)^\top\xi)^2$ and Lemma~\ref{thm:wz_std_lemma} implies
+\begin{align*}
+\E[\|q\|_2^2\,y^2]
+&=\E_{s_0}\!\left[\E_{\xi}\!\left[w(\xi)\,(\xi^\top u(s_0))^2\mid s_0\right]\right]
+=\E_{s_0}\!\left[(2m+8)\,\|u(s_0)\|^2\right]\\
+&=(2m+8)\,\E_{s_0}\!\left[s_0^\top(M_{se}\Sigma M_{se}^\top)s_0\right]
+=(2m+8)\,\tr\!\big(\Sigma_0\,M_{se}\Sigma M_{se}^\top\big)\\
+&=(2m+8)\,\mathrm{IS}_{\Sigma_0}\!\big(M_{se}\Sigma M_{se}^\top\big),
+\end{align*}
+concluding the proof.
+\end{proof}

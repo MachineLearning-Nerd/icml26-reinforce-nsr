@@ -1,0 +1,692 @@
+%!TEX root = ../main.tex
+\section{Proof of Theorem \ref{thm:lqr-variance-T-compose}}
+\label{sec:app-proof-lqr-variance-T-compose}
+
+\begin{proof}
+Recall the policy gradient estimators
+\[
+\widehat G_K
+=\sum_{t=0}^{T-1}\Sigma^{-1}\varepsilon_t s_t^\top\,R(\tau),
+\qquad
+\widehat G_{\ell}
+=\sum_{t=0}^{T-1}\Big(\Sigma^{-1}(\varepsilon_t\odot \varepsilon_t)-\mathbf 1\Big)\,R(\tau),
+\]
+and the stacked noise $\bar\varepsilon:=(\varepsilon_0^\top,\dots,\varepsilon_{T-1}^\top)^\top\sim\mathcal N(0,\overline\Sigma)$
+with $\overline\Sigma:=I_T\otimes\Sigma$.
+
+% =========================================================
+% Expand both second moments
+% =========================================================
+
+\paragraph{Second moment expansions.}
+Using $\|AB\|_{\mathrm{F}}^2=\tr(B^\top A^\top A B)$,
+\[
+\|\widehat G_K\|_{\mathrm{F}}^2
+=\Big\|\sum_{t=0}^{T-1}\Sigma^{-1}\varepsilon_t s_t^\top\Big\|_{\mathrm{F}}^2\,R(\tau)^2
+=\sum_{t,p=0}^{T-1}\big(\varepsilon_t^\top\Sigma^{-2}\varepsilon_p\big)\,(s_t^\top s_p)\,R(\tau)^2.
+\]
+For the log-std part, define
+\[
+g_t := \Sigma^{-1}(\varepsilon_t\odot \varepsilon_t)-\mathbf 1\in\mathbb R^m.
+\]
+Then
+\[
+\|\widehat G_{\ell}\|_2^2
+=\Big\|\sum_{t=0}^{T-1} g_t\Big\|_2^2 R(\tau)^2
+=\sum_{t,p=0}^{T-1}(g_t^\top g_p)\,R(\tau)^2.
+\]
+
+Using the lifted decomposition $R(\tau)=-(x+2y+z)$ with
+\[
+x=s_0^\top\overline M_{ss}s_0,\qquad
+y=s_0^\top\overline M_{se}\bar\varepsilon,\qquad
+z=\bar\varepsilon^\top\overline M_{ee}\bar\varepsilon,
+\]
+we have
+\begin{equation}\label{eq:R2_expand_full}
+R(\tau)^2=(x+2y+z)^2 = x^2+z^2+2xz+4y^2 + 4xy + 4yz .
+\end{equation}
+Therefore
+\begin{equation}\label{eq:EGnorm_expand_tp}
+\mathbb E\big[\|\widehat G_K\|_{\mathrm{F}}^2\big]
+=\sum_{t,p=0}^{T-1}\mathbb E\Big[(\varepsilon_t^\top\Sigma^{-2}\varepsilon_p)(s_t^\top s_p)\,
+\big(x^2+z^2+2xz+4y^2+4xy+4yz\big)\Big].
+\end{equation}
+
+\paragraph{Even-only reduction for the $\ell$-part.}
+Note that $g_t^\top g_p$ is an \emph{even} polynomial in $\bar\varepsilon$, while $xy$ and $yz$ have \emph{odd} total
+degree in $\bar\varepsilon$; hence
+\[
+\mathbb E_{\bar\varepsilon} \big[(g_t^\top g_p)\,(4xy+4yz)\mid s_0\big]=0,
+\]
+and therefore
+\begin{equation}\label{eq:EGell_even_only}
+\mathbb E\big[\|\widehat G_{\ell}\|_2^2\big]
+=\sum_{t,p=0}^{T-1}\mathbb E\Big[(g_t^\top g_p)\,\big(x^2+z^2+2xz+4y^2\big)\Big].
+\end{equation}
+
+% =========================================================
+% Multi step gradient
+% =========================================================
+
+\paragraph{Multi-step gradient.}
+Consider the original dynamics~\eqref{eq:lqr-dynamics-reward} (not the lifted one). Since $\mathbb E[s_0]=0$ and $\mathbb E[\varepsilon_t]=0$, it follows by induction that $\mathbb E[s_t]=0$ for all $t$. Let $P_t:=\text{Cov}(s_t)$. Using independence of $s_t$ and $\varepsilon_t$,
+\[
+P_{t+1}=\text{Cov}(Fs_t+B\varepsilon_t)=F P_t F^\top + B\Sigma B^\top,\qquad P_0=\Sigma_0.
+\]
+
+Therefore
+\[
+\mathbb E\big[s_{t+1}^\top Q_s\, s_{t+1}\big]=\tr(Q_s\, P_{t+1}).
+\]
+Also $a_t=K s_t+\varepsilon_t$ is zero-mean with
+\[
+\text{Cov}(a_t)=K P_t K^\top + \Sigma
+\quad\Rightarrow\quad
+\mathbb E\big[a_t^\top Q_a\, a_t\big]=\tr \big(Q_a(K P_t K^\top+\Sigma)\big)
+= \tr(Q_a K P_t K^\top)+\tr(Q_a\Sigma).
+\]
+Taking expectations in $r(s_{t+1},a_t)=-(s_{t+1}^\top Q_s\, s_{t+1}+a_t^\top Q_a\, a_t)$ and summing over $t=0,\dots,T-1$ with discount $\gamma^t$ yields
+\begin{align}\label{eq:lqr-objective-matrix-form}
+  J_T(K,\Sigma)
+= -\sum_{t=0}^{T-1}\gamma^{t} \left(\tr(Q_s\,P_{t+1})
++\tr(Q_a\,K P_t K^\top)+\tr(Q_a\Sigma)\right).
+\end{align}
+To take the gradient of \eqref{eq:lqr-objective-matrix-form}, we use a Lagrangian to enforce the covariance dynamics $P_{t+1}=F P_t F^\top + B\Sigma B^\top$.
+Introduce multipliers $\{\Lambda_{t+1}\}_{t=0}^{T-1}$ and set
+\[
+\mathcal L
+= -\sum_{t=0}^{T-1}\gamma^{t} \left(\tr(Q_s\,P_{t+1})+\tr(Q_a\,K P_t K^\top)+\tr(Q_a\Sigma)\right)
+\;+\;\sum_{t=0}^{T-1}\gamma^{t+1}\tr \Big(\Lambda_{t+1}\,(P_{t+1}-F P_t F^\top - B\Sigma B^\top)\Big).
+\]
+
+(i) Stationarity \wrt  $P_t$.
+For $t=1,\dots,T-1$, the matrix $P_t$ appears in the terms at indices $t-1$ and $t$:
+\[
+\partial_{P_t}\mathcal L:\quad
+-\gamma^{t-1}Q_s\;-\gamma^{t}K^\top Q_a K \;+\;\gamma^{t}\Lambda_t\;-\;\gamma^{t+1}F^\top \Lambda_{t+1}F \;=\;0.
+\]
+Dividing by $\gamma^{t}$ yields the recursion
+$\Lambda_t=\tfrac{1}{\gamma}Q_s+K^\top Q_a K+\gamma F^\top\Lambda_{t+1}F$.
+For $t=T$, only the $(T-1)$-indexed terms contain $P_T$, giving
+$-\gamma^{T-1}Q_s+\gamma^{T}\Lambda_T=0$, hence $\Lambda_T=\tfrac{1}{\gamma}Q_s$.
+
+(ii) Envelope / stationarity \wrt  $K$ and $\Sigma$.
+Only two parts of $\mathcal L$ depend explicitly on $K$:
+the quadratic term in $a_t$ and the dynamics through $F=A+BK$.
+Using $dF=B\,dK$, symmetricity of $P_t, \Lambda_t$, and standard identities for matrix differentials,
+\[
+d\,\tr(Q_a\,K P_t K^\top) \;=\; 2\,\tr \big((Q_a K P_t)^\top dK\big),
+\quad
+d\,\tr(\Lambda_{t+1} F P_t F^\top)
+=\;2\,\tr \big((B^\top\Lambda_{t+1}F P_t)^\top dK\big).
+\]
+Therefore,
+\[
+\partial_K\mathcal L
+= -\,2\sum_{t=0}^{T-1}\gamma^t\,(Q_a K P_t)
+\;-\;2\sum_{t=0}^{T-1}\gamma^{t+1}\,(B^\top\Lambda_{t+1}F P_t)
+= -\,2\sum_{t=0}^{T-1}\gamma^{t}\Big( Q_a K P_t \;+\; \gamma\, B^\top \Lambda_{t+1} F\, P_t \Big)
+\]
+
+Only two places depend on $\Sigma$:
+the immediate term $-\gamma^t\tr(Q_a\Sigma)$ and the constraint term
+$-\gamma^{t+1}\tr(\Lambda_{t+1}\,B\Sigma B^\top)$. Then
+\[
+\frac{\partial \mathcal L}{\partial \Sigma}
+= -\sum_{t=0}^{T-1}\gamma^t Q_a \;-\; \sum_{t=0}^{T-1}\gamma^{t+1}\,B^\top\Lambda_{t+1}B = -\sum_{t=0}^{T-1}\gamma^t\Big( Q_a \;+\; \gamma\, B^\top \Lambda_{t+1} B \Big),
+\]
+Therefore, the gradient with respect to the log-std parameter \(\ell\) is
+\begin{equation}
+\nabla_\ell J_T
+\;=\;
+-2\,\diag{\Sigma\sum_{t=0}^{T-1}\gamma^t\Big( Q_a \;+\; \gamma\, B^\top \Lambda_{t+1} B \Big)}
+\;\;\in\mathbb{R}^{m}.
+\end{equation}
+
+% =========================================================
+% K PART
+% =========================================================
+
+\paragraph{Variance of $K$-part: selectors and lifted state expansion.}
+Introduce block selectors $\Pi_t$ such that $\varepsilon_t=\Pi_t\bar\varepsilon$. Then
+\[
+\varepsilon_t^\top\Sigma^{-2}\varepsilon_p
+=\bar\varepsilon^\top W^K_{tp}\bar\varepsilon,
+\qquad
+W^K_{tp}:=\Pi_t^\top\Sigma^{-2}\Pi_p.
+\]
+Also, with $s_t=S_t\bar s$ and $\bar s=\mathcal F_S s_0+\mathcal F_E\bar\varepsilon$, define
+\[
+F_t:=S_t\mathcal F_S,\qquad E_t:=S_t\mathcal F_E,
+\]
+so that $s_t=F_t s_0+E_t\bar\varepsilon$ and hence
+\begin{equation}\label{eq:stsp_full_expand}
+s_t^\top s_p
+=s_0^\top(F_t^\top F_p)s_0
++s_0^\top(F_t^\top E_p+F_p^\top E_t)\bar\varepsilon
++\bar\varepsilon^\top(E_t^\top E_p)\bar\varepsilon.
+\end{equation}
+Define
+\[
+G_{tp}:=F_t^\top F_p,\qquad
+J_{tp}:=F_t^\top E_p+F_p^\top E_t,\qquad
+U_{tp}:=E_t^\top E_p.
+\]
+
+\paragraph{Parity bookkeeping after conditioning on $s_0$ ($K$-part).}
+Condition on $s_0$. Since $s_0 \perp\!\!\!\perp \bar\varepsilon$ and $\bar\varepsilon$ is centered Gaussian,
+only even total degree polynomials in $\bar\varepsilon$ survive inside $\mathbb E_{\bar\varepsilon}[\cdot\mid s_0]$.
+Note
+\[
+\bar\varepsilon^\top W^K_{tp}\bar\varepsilon \text{ is degree }2,\quad
+s_0^\top G_{tp}s_0 \text{ is degree }0,\quad
+s_0^\top J_{tp}\bar\varepsilon \text{ is degree }1,\quad
+\bar\varepsilon^\top U_{tp}\bar\varepsilon \text{ is degree }2,
+\]
+and among \eqref{eq:R2_expand_full},
+\[
+x^2 \text{ degree }0,\quad
+z^2 \text{ degree }4,\quad
+xz \text{ degree }2,\quad
+y^2 \text{ degree }2,\quad
+xy \text{ degree }1,\quad
+yz \text{ degree }3.
+\]
+Therefore, for the \emph{even} part $x^2+z^2+2xz+4y^2$, the linear term
+$s_0^\top J_{tp}\bar\varepsilon$ in \eqref{eq:stsp_full_expand} yields an odd integrand and vanishes, so
+\[
+s_t^\top s_p \;\to\; s_0^\top G_{tp}s_0+\bar\varepsilon^\top U_{tp}\bar\varepsilon
+\qquad\text{when multiplying}\qquad (x^2+z^2+2xz+4y^2).
+\]
+For the \emph{odd} part $4xy+4yz$, only the linear term survives (odd$\times$odd becomes even), hence
+\[
+s_t^\top s_p \;\to\; s_0^\top J_{tp}\bar\varepsilon
+\qquad\text{when multiplying}\qquad (4xy+4yz).
+\]
+
+\paragraph{Six-term decomposition ($K$-part).}
+Substituting $\varepsilon_t^\top\Sigma^{-2}\varepsilon_p=\bar\varepsilon^\top W^K_{tp}\bar\varepsilon$ and using the parity reductions,
+\eqref{eq:EGnorm_expand_tp} becomes
+\[
+\mathbb E\big[\|\widehat G_K\|_{\mathrm{F}}^2\big]
+=\sum_{t,p=0}^{T-1}\big(E^{K}_{1,tp}+E^{K}_{2,tp}+E^{K}_{3,tp}+E^{K}_{4,tp}+E^{K}_{5,tp}+E^{K}_{6,tp}\big),
+\]
+where the \emph{even-part} contributions are
+\begin{align*}
+E^{K}_{1,tp}&:=\mathbb E \left[(\bar\varepsilon^\top W^K_{tp}\bar\varepsilon)\Big(s_0^\top G_{tp}s_0+\bar\varepsilon^\top U_{tp}\bar\varepsilon\Big)\,x^2\right],\\
+E^{K}_{2,tp}&:=\mathbb E \left[(\bar\varepsilon^\top W^K_{tp}\bar\varepsilon)\Big(s_0^\top G_{tp}s_0+\bar\varepsilon^\top U_{tp}\bar\varepsilon\Big)\,z^2\right],\\
+E^{K}_{3,tp}&:=2\,\mathbb E \left[(\bar\varepsilon^\top W^K_{tp}\bar\varepsilon)\Big(s_0^\top G_{tp}s_0+\bar\varepsilon^\top U_{tp}\bar\varepsilon\Big)\,x z\right],\\
+E^{K}_{4,tp}&:=4\,\mathbb E \left[(\bar\varepsilon^\top W^K_{tp}\bar\varepsilon)\Big(s_0^\top G_{tp}s_0+\bar\varepsilon^\top U_{tp}\bar\varepsilon\Big)\,y^2\right],
+\end{align*}
+and the \emph{odd-part} contributions are
+\begin{equation}\label{eq:EtpFtp_def}
+E^{K}_{5,tp}:=4\,\mathbb E \left[(\bar\varepsilon^\top W^K_{tp}\bar\varepsilon)\,(s_0^\top J_{tp}\bar\varepsilon)\,x\,y\right],\qquad
+E^{K}_{6,tp}:=4\,\mathbb E \left[(\bar\varepsilon^\top W^K_{tp}\bar\varepsilon)\,(s_0^\top J_{tp}\bar\varepsilon)\,y\,z\right].
+\end{equation}
+
+\noindent\textbf{Term $E^{K}_{1,tp}$ ($x^2$-part).}
+Since $x$ depends only on $s_0$, we can factor expectations:
+\begin{align}\label{eq:E1tp_final}
+E^{K}_{1,tp}
+&=\mathbb E \left[(\bar\varepsilon^\top W^K_{tp}\bar\varepsilon)(s_0^\top G_{tp}s_0)\,x^2\right]
++\mathbb E \left[(\bar\varepsilon^\top W^K_{tp}\bar\varepsilon)(\bar\varepsilon^\top U_{tp}\bar\varepsilon)\,x^2\right] \nonumber \\
+&=\mathrm{IS}_{\Sigma_0}\big(\symfun(G_{tp}),\symfun(\overline M_{ss}),\symfun(\overline M_{ss})\big)\;
+  \mathrm{IS}_{\overline\Sigma}\big(\symfun(W^K_{tp})\big) \nonumber \\
+&\quad+
+  \mathrm{IS}_{\Sigma_0} \big(\symfun(\overline M_{ss}),\symfun(\overline M_{ss})\big)\;
+  \mathrm{IS}_{\overline\Sigma}\big(\symfun(W^K_{tp}),\symfun(U_{tp})\big).
+\end{align}
+
+\medskip
+\noindent\textbf{Term $E^{K}_{2,tp}$ ($z^2$-part).}
+\begin{align}\label{eq:E2tp_final}
+E^{K}_{2,tp}
+&=\mathrm{IS}_{\Sigma_0}\big(\symfun(G_{tp})\big)\;
+  \mathrm{IS}_{\overline\Sigma}\big(\symfun(W^K_{tp}),\symfun(\overline M_{ee}),\symfun(\overline M_{ee})\big) \nonumber \\
+&\quad+
+  \mathrm{IS}_{\overline\Sigma}\big(\symfun(W^K_{tp}),\symfun(U_{tp}),\symfun(\overline M_{ee}),\symfun(\overline M_{ee})\big).
+\end{align}
+
+\medskip
+\noindent\textbf{Term $E^{K}_{3,tp}$ ($2xz$-part).}
+\begin{align}\label{eq:E3tp_final}
+E^{K}_{3,tp}
+&=2\,\mathrm{IS}_{\Sigma_0}\big(\symfun(G_{tp}),\symfun(\overline M_{ss})\big)\;
+     \mathrm{IS}_{\overline\Sigma}\big(\symfun(W^K_{tp}),\symfun(\overline M_{ee})\big) \nonumber \\
+&\quad+
+  2\,\mathrm{IS}_{\Sigma_0}\big(\symfun(\overline M_{ss})\big)\;
+     \mathrm{IS}_{\overline\Sigma}\big(\symfun(W^K_{tp}),\symfun(U_{tp}),\symfun(\overline M_{ee})\big).
+\end{align}
+
+\medskip
+\noindent\textbf{Term $E^{K}_{4,tp}$ ($4y^2$-part).}
+Since $y=s_0^\top\overline M_{se}\bar\varepsilon$, we have
+\[
+y^2=\bar\varepsilon^\top H(s_0)\bar\varepsilon,\qquad
+H(s_0):=\overline M_{se}^\top s_0 s_0^\top\overline M_{se}.
+\]
+Then
+\begin{align}
+E^{K}_{4,tp}
+&=4\,\mathbb E \left[(\bar\varepsilon^\top W^K_{tp}\bar\varepsilon)\Big(s_0^\top G_{tp}s_0+\bar\varepsilon^\top U_{tp}\bar\varepsilon\Big)\,(\bar\varepsilon^\top H(s_0)\bar\varepsilon)\right]\nonumber\\
+&=4\,\mathbb E_{s_0} \Bigg[\;
+(s_0^\top G_{tp}s_0)\underbrace{\mathbb E_{\bar\varepsilon}\left[(\bar\varepsilon^\top W^K_{tp}\bar\varepsilon)(\bar\varepsilon^\top H(s_0)\bar\varepsilon)\,\middle|\,s_0\right]}_{=:T_1(s_0)}
++\underbrace{\mathbb E_{\bar\varepsilon} \left[(\bar\varepsilon^\top W^K_{tp}\bar\varepsilon)(\bar\varepsilon^\top U_{tp}\bar\varepsilon)(\bar\varepsilon^\top H(s_0)\bar\varepsilon)\,\middle|\,s_0\right]}_{=:T_2(s_0)}
+\;\Bigg].\label{eq:Dtp_cond_expand}
+\end{align}
+By Lemma~\ref{lem:IS_shorthand} (the $k=2$ and $k=3$ cases) with $\Omega=\overline\Sigma$,
+\begin{align}
+T_1(s_0)
+&=\mathrm{IS}_{\overline\Sigma}\big(\symfun(W^K_{tp}),H(s_0)\big)\notag\\
+&=\tr(\overline\Sigma\,\symfun(W^K_{tp}))\tr(\overline\Sigma\,H(s_0))
++2\,\tr(\overline\Sigma\,\symfun(W^K_{tp})\,\overline\Sigma\,H(s_0)),\label{eq:T1_expand}\\
+T_2(s_0)
+&=\mathrm{IS}_{\overline\Sigma}\big(\symfun(W^K_{tp}),\symfun(U_{tp}),H(s_0)\big)\notag\\
+&=\tr(\overline\Sigma\,\symfun(W^K_{tp}))\tr(\overline\Sigma\,\symfun(U_{tp}))\tr(\overline\Sigma\,H(s_0))
++2\,\tr(\overline\Sigma\,\symfun(W^K_{tp})\,\overline\Sigma\,\symfun(U_{tp}))\tr(\overline\Sigma\,H(s_0))\notag\\
+&\quad
++2\,\tr(\overline\Sigma\,\symfun(W^K_{tp})\,\overline\Sigma\,H(s_0))\tr(\overline\Sigma\,\symfun(U_{tp}))
++2\,\tr(\overline\Sigma\,\symfun(U_{tp})\,\overline\Sigma\,H(s_0))\tr(\overline\Sigma\,\symfun(W^K_{tp}))\notag\\
+&\quad
++8\,\tr(\overline\Sigma\,\symfun(W^K_{tp})\,\overline\Sigma\,\symfun(U_{tp})\,\overline\Sigma\,H(s_0)).\label{eq:T2_expand}
+\end{align}
+Introduce $\alpha_{tp}:=\tr(\overline\Sigma\,\symfun(W^K_{tp}))$, $\beta_{tp}:=\tr(\overline\Sigma\,\symfun(U_{tp}))$,
+$\delta_{tp}:=\tr(\overline\Sigma\,\symfun(W^K_{tp})\,\overline\Sigma\,\symfun(U_{tp}))$, and the matrices
+\[
+V_0:=\overline M_{se}\,\overline\Sigma\,\overline M_{se}^\top,\qquad
+V_{tp}:=\overline M_{se}\,\overline\Sigma\,\symfun(W^K_{tp})\,\overline\Sigma\,\overline M_{se}^\top,
+\]
+\[
+\widetilde V_{tp}:=\overline M_{se}\,\overline\Sigma\,\symfun(U_{tp})\,\overline\Sigma\,\overline M_{se}^\top,\qquad
+\widehat V_{tp}:=\overline M_{se}\,\overline\Sigma\,\symfun(W^K_{tp})\,\overline\Sigma\,\symfun(U_{tp})\,\overline\Sigma\,\overline M_{se}^\top.
+\]
+Using $H(s_0)=\overline M_{se}^\top s_0 s_0^\top\overline M_{se}$ and cyclicity of trace, we obtain
+\[
+\tr(\overline\Sigma\,H(s_0))=s_0^\top V_0 s_0,\qquad
+\tr(\overline\Sigma\,\symfun(W^K_{tp})\,\overline\Sigma\,H(s_0))=s_0^\top V_{tp} s_0,
+\]
+\[
+\tr(\overline\Sigma\,\symfun(U_{tp})\,\overline\Sigma\,H(s_0))=s_0^\top \widetilde V_{tp} s_0,\qquad
+\tr(\overline\Sigma\,\symfun(W^K_{tp})\,\overline\Sigma\,\symfun(U_{tp})\,\overline\Sigma\,H(s_0))=s_0^\top \widehat V_{tp} s_0.
+\]
+Substituting into \eqref{eq:T1_expand}--\eqref{eq:T2_expand} yields
+\[
+T_1(s_0)=\alpha_{tp}(s_0^\top V_0 s_0)+2(s_0^\top V_{tp}s_0),
+\]
+\[
+T_2(s_0)
+=(\alpha_{tp}\beta_{tp}+2\delta_{tp})(s_0^\top V_0 s_0)
++2\beta_{tp}(s_0^\top V_{tp}s_0)
++2\alpha_{tp}(s_0^\top \widetilde V_{tp}s_0)
++8(s_0^\top \widehat V_{tp}s_0).
+\]
+Taking $\mathbb E_{s_0}$ term-by-term and using Lemma~\ref{lem:IS_shorthand} with $\Omega=\Sigma_0$ gives
+\begin{align}\label{eq:Dtp_final}
+E^{K}_{4,tp}
+&=
+4\Big(
+\alpha_{tp}\,\mathrm{IS}_{\Sigma_0}(\symfun(G_{tp}),V_0)
++2\,\mathrm{IS}_{\Sigma_0}(\symfun(G_{tp}),V_{tp})
++(\alpha_{tp}\beta_{tp}+2\delta_{tp})\,\mathrm{IS}_{\Sigma_0}(V_0) \nonumber\\
+&+2\beta_{tp}\,\mathrm{IS}_{\Sigma_0}(V_{tp})
++2\alpha_{tp}\,\mathrm{IS}_{\Sigma_0}(\widetilde V_{tp})
++8\,\mathrm{IS}_{\Sigma_0} \big(\symfun(\widehat V_{tp})\big)
+\Big).
+\end{align}
+
+\medskip
+\noindent\textbf{Term $E^{K}_{5,tp}$ ($4xy$-part).}
+Recall $y=s_0^\top\overline M_{se}\bar\varepsilon$. Define
+\[
+L_{tp}(s_0):=J_{tp}^\top s_0 s_0^\top \overline M_{se}\in\mathbb R^{mT\times mT}.
+\]
+Then
+\[
+(s_0^\top J_{tp}\bar\varepsilon)\,(s_0^\top \overline M_{se}\bar\varepsilon)
+=\bar\varepsilon^\top L_{tp}(s_0)\bar\varepsilon,
+\]
+and since $x=s_0^\top\overline M_{ss}s_0$ depends only on $s_0$, conditioning on $s_0$ gives
+\begin{align}
+E^{K}_{5,tp}
+&=4\,\mathbb E_{s_0} \left[
+x\;\mathbb E_{\bar\varepsilon} \left[(\bar\varepsilon^\top W^K_{tp}\bar\varepsilon)\,(\bar\varepsilon^\top L_{tp}(s_0)\bar\varepsilon)\,\middle|\,s_0\right]\right]\nonumber\\
+&=4\,\mathbb E_{s_0} \left[x\;\mathrm{IS}_{\overline\Sigma} \big(\symfun(W^K_{tp}),\symfun(L_{tp}(s_0))\big)\right].\label{eq:Etp_cond}
+\end{align}
+Introduce $\alpha_{tp}:=\tr(\overline\Sigma\,\symfun(W^K_{tp}))$ and define
+\[
+V^{(0)}_{tp}:=\symfun \Big(\overline M_{se}\,\overline\Sigma\,J_{tp}^\top\Big),\qquad
+V^{(1)}_{tp}:=\symfun \Big(\overline M_{se}\,\overline\Sigma\,\symfun(W^K_{tp})\,\overline\Sigma\,J_{tp}^\top\Big).
+\]
+Then the same trace-to-quadratic-form yields
+\begin{equation}\label{eq:Etp_final}
+E^{K}_{5,tp}
+=
+4\Big(
+\alpha_{tp}\,\mathrm{IS}_{\Sigma_0} \big(\symfun(\overline M_{ss}),V^{(0)}_{tp}\big)
++2\,\mathrm{IS}_{\Sigma_0} \big(\symfun(\overline M_{ss}),V^{(1)}_{tp}\big)
+\Big).
+\end{equation}
+
+\medskip
+\noindent\textbf{Term $E^{K}_{6,tp}$ ($4yz$-part).}
+Using the same $L_{tp}(s_0)$ and $z=\bar\varepsilon^\top\overline M_{ee}\bar\varepsilon$, conditioning on $s_0$ gives
+\begin{align}
+E^{K}_{6,tp}
+&=4\,\mathbb E_{s_0} \left[
+\mathrm{IS}_{\overline\Sigma} \Big(\symfun(W^K_{tp}),\symfun(\overline M_{ee}),\symfun(L_{tp}(s_0))\Big)\right].
+\label{eq:Ftp_cond}
+\end{align}
+Define
+\[
+\alpha_{tp}:=\tr(\overline\Sigma\,\symfun(W^K_{tp})),\qquad
+\mu:=\tr(\overline\Sigma\,\symfun(\overline M_{ee})),\qquad
+\kappa_{tp}:=\tr(\overline\Sigma\,\symfun(W^K_{tp})\,\overline\Sigma\,\symfun(\overline M_{ee})).
+\]
+With
+\[
+A^{(0)}:=\overline\Sigma,\quad
+A^{(1)}:=\overline\Sigma\,\symfun(W^K_{tp})\,\overline\Sigma,\quad
+A^{(2)}:=\overline\Sigma\,\symfun(\overline M_{ee})\,\overline\Sigma,\quad
+A^{(3)}:=\symfun(\overline\Sigma\,\symfun(W^K_{tp})\,\overline\Sigma\,\symfun(\overline M_{ee})\,\overline\Sigma),
+\]
+and
+\[
+V^{(j)}_{tp}:=\symfun \Big(\overline M_{se}\,A^{(j)}\,J_{tp}^\top\Big)\quad (j=0,1,2,3),
+\]
+the trace-to-quadratic-form conversion gives
+\begin{equation}\label{eq:Ftp_final}
+E^{K}_{6,tp}
+=
+4\Big(
+(\alpha_{tp}\mu+2\kappa_{tp})\,\mathrm{IS}_{\Sigma_0} \big(V^{(0)}_{tp}\big)
++2\mu\,\mathrm{IS}_{\Sigma_0} \big(V^{(1)}_{tp}\big)
++2\alpha_{tp}\,\mathrm{IS}_{\Sigma_0} \big(V^{(2)}_{tp}\big)
++8\,\mathrm{IS}_{\Sigma_0} \big(V^{(3)}_{tp}\big)
+\Big).
+\end{equation}
+
+% =========================================================
+% ell PART
+% =========================================================
+
+\paragraph{$\ell$-part: lifted representation of $g_t^\top g_p$.}
+Introduce $\Pi_t$ such that $\varepsilon_t=\Pi_t\bar\varepsilon$.
+Write $D:=\Sigma^{-1}=\mathrm{diag}(d_1,\dots,d_m)$.
+Then
+\[
+g_t^\top g_p
+=\big(D(\varepsilon_t\odot\varepsilon_t)-\mathbf 1\big)^\top\big(D(\varepsilon_p\odot\varepsilon_p)-\mathbf 1\big)
+=(\varepsilon_t\odot\varepsilon_t)^\top D^2(\varepsilon_p\odot\varepsilon_p)
+-\varepsilon_t^\top D\varepsilon_t-\varepsilon_p^\top D\varepsilon_p+m.
+\]
+To express the quartic term via quadratic forms, define for each $i\in\{1,\dots,m\}$
+\[
+Q_{t,i}:=\Pi_t^\top e_ie_i^\top \Pi_t\in\mathbb R^{mT\times mT}
+\quad\Rightarrow\quad
+\varepsilon_{t,i}^2=\bar\varepsilon^\top Q_{t,i}\bar\varepsilon,
+\]
+and define
+\[
+W^\ell_t:=\Pi_t^\top D \Pi_t\in\mathbb R^{mT\times mT}
+\quad\Rightarrow\quad
+\varepsilon_t^\top D\varepsilon_t=\bar\varepsilon^\top W^\ell_t\bar\varepsilon.
+\]
+Then
+\begin{equation}\label{eq:gtgp_lifted}
+g_t^\top g_p
+=\sum_{i=1}^m d_i^2\,
+(\bar\varepsilon^\top Q_{t,i}\bar\varepsilon)\,(\bar\varepsilon^\top Q_{p,i}\bar\varepsilon)
+-(\bar\varepsilon^\top W^\ell_t\bar\varepsilon)-(\bar\varepsilon^\top W^\ell_p\bar\varepsilon)+m.
+\end{equation}
+
+\paragraph{Four-term decomposition ($\ell$-part).}
+From \eqref{eq:EGell_even_only},
+\[
+\mathbb E\big[\|\widehat G_{\ell}\|_2^2\big]
+=\sum_{t,p=0}^{T-1}\big(E^{\ell}_{1,tp}+E^{\ell}_{2,tp}+E^{\ell}_{3,tp}+E^{\ell}_{4,tp}\big),
+\]
+where
+\[
+E^{\ell}_{1,tp}:=\mathbb E[(g_t^\top g_p)x^2],\quad
+E^{\ell}_{2,tp}:=\mathbb E[(g_t^\top g_p)z^2],\quad
+E^{\ell}_{3,tp}:=2\,\mathbb E[(g_t^\top g_p)xz],\quad
+E^{\ell}_{4,tp}:=4\,\mathbb E[(g_t^\top g_p)y^2].
+\]
+
+\medskip
+\noindent\textbf{Term $E^{\ell}_{1,tp}$ ($x^2$-part).}
+Since $x$ depends only on $s_0$ and $g_t^\top g_p$ depends only on $\bar\varepsilon$,
+\[
+E^{\ell}_{1,tp}=\mathbb E[x^2]\;\mathbb E[g_t^\top g_p]
+=\mathrm{IS}_{\Sigma_0} \big(\symfun(\overline M_{ss}),\symfun(\overline M_{ss})\big)\;\mathbb E[g_t^\top g_p].
+\]
+Under $\overline\Sigma=I_T\otimes\Sigma$, $\{g_t\}$ are independent across time and $\mathbb E[g_t]=0$, hence
+\[
+\mathbb E[g_t^\top g_p]=\mathbb E[\|g_t\|_2^2]\mathbf 1_{\{t=p\}}=2m\,\mathbf 1_{\{t=p\}},
+\]
+so
+\begin{equation}\label{eq:Atp_ell_final}
+E^{\ell}_{1,tp}
+=2m\,\mathbf 1_{\{t=p\}}\;\mathrm{IS}_{\Sigma_0} \big(\symfun(\overline M_{ss}),\symfun(\overline M_{ss})\big).
+\end{equation}
+
+\medskip
+\noindent\textbf{Term $E^{\ell}_{2,tp}$ ($z^2$-part).}
+Using \eqref{eq:gtgp_lifted} and $z=\bar\varepsilon^\top\overline M_{ee}\bar\varepsilon$,
+\begin{align}
+E^{\ell}_{2,tp}
+&=\sum_{i=1}^m d_i^2\,
+\mathrm{IS}_{\overline\Sigma} \big(\symfun(Q_{t,i}),\symfun(Q_{p,i}),\symfun(\overline M_{ee}),\symfun(\overline M_{ee})\big)\notag\\
+&\quad-\mathrm{IS}_{\overline\Sigma} \big(\symfun(W^\ell_t),\symfun(\overline M_{ee}),\symfun(\overline M_{ee})\big)
+-\mathrm{IS}_{\overline\Sigma} \big(\symfun(W^\ell_p),\symfun(\overline M_{ee}),\symfun(\overline M_{ee})\big)\notag\\
+&\quad+m\,\mathrm{IS}_{\overline\Sigma} \big(\symfun(\overline M_{ee}),\symfun(\overline M_{ee})\big).
+\label{eq:Btp_ell_final}
+\end{align}
+
+\medskip
+\noindent\textbf{Term $E^{\ell}_{3,tp}$ ($2xz$-part).}
+Since $x$ depends only on $s_0$,
+\[
+E^{\ell}_{3,tp}=2\,\mathbb E[x]\;\mathbb E[(g_t^\top g_p)z]
+=2\,\mathrm{IS}_{\Sigma_0} \big(\symfun(\overline M_{ss})\big)\;\mathbb E[(g_t^\top g_p)z].
+\]
+By \eqref{eq:gtgp_lifted},
+\begin{align}
+\mathbb E[(g_t^\top g_p)z]
+&=\sum_{i=1}^m d_i^2\,
+\mathrm{IS}_{\overline\Sigma} \big(\symfun(Q_{t,i}),\symfun(Q_{p,i}),\symfun(\overline M_{ee})\big)\notag\\
+&\quad-\mathrm{IS}_{\overline\Sigma} \big(\symfun(W^\ell_t),\symfun(\overline M_{ee})\big)
+-\mathrm{IS}_{\overline\Sigma} \big(\symfun(W^\ell_p),\symfun(\overline M_{ee})\big)
++m\,\mathrm{IS}_{\overline\Sigma} \big(\symfun(\overline M_{ee})\big),
+\end{align}
+hence
+\begin{align}\label{eq:Ctp_ell_final}
+E^{\ell}_{3,tp}
+&=2\,\mathrm{IS}_{\Sigma_0} \big(\symfun(\overline M_{ss})\big)\Big[
+\sum_{i=1}^m d_i^2\,
+\mathrm{IS}_{\overline\Sigma} \big(\symfun(Q_{t,i}),\symfun(Q_{p,i}),\symfun(\overline M_{ee})\big)
+-\mathrm{IS}_{\overline\Sigma} \big(\symfun(W^\ell_t),\symfun(\overline M_{ee})\big)\notag\\
+&\hspace{3.0cm}
+-\mathrm{IS}_{\overline\Sigma} \big(\symfun(W^\ell_p),\symfun(\overline M_{ee})\big)
++m\,\mathrm{IS}_{\overline\Sigma} \big(\symfun(\overline M_{ee})\big)\Big].
+\end{align}
+
+\medskip
+\noindent\textbf{Term $E^{\ell}_{4,tp}$ ($4y^2$-part).}
+Recall $y=s_0^\top\overline M_{se}\bar\varepsilon$ and define
+\[
+H(s_0):=\overline M_{se}^\top s_0 s_0^\top\overline M_{se}
+\quad\Rightarrow\quad
+y^2=\bar\varepsilon^\top H(s_0)\bar\varepsilon .
+\]
+Conditioning on $s_0$ and using \eqref{eq:gtgp_lifted} yields
+\begin{align}
+E^{\ell}_{4,tp}
+&=4\,\mathbb E_{s_0}\Big[
+\sum_{i=1}^m d_i^2\,\mathrm{IS}_{\overline\Sigma} \big(\symfun(Q_{t,i}),\symfun(Q_{p,i}),H(s_0)\big)
+-\mathrm{IS}_{\overline\Sigma} \big(\symfun(W^\ell_t),H(s_0)\big)\notag\\
+&\hspace{3.6cm}
+-\mathrm{IS}_{\overline\Sigma} \big(\symfun(W^\ell_p),H(s_0)\big)
++m\,\mathrm{IS}_{\overline\Sigma} \big(H(s_0)\big)\Big].
+\label{eq:Dtp_ell_cond}
+\end{align}
+
+Introduce $c(s_0):=\tr(\overline\Sigma\,H(s_0))$. Using cyclicity of trace,
+\begin{equation}\label{eq:cs0_V0}
+c(s_0)=s_0^\top V_0 s_0,\qquad V_0:=\overline M_{se}\,\overline\Sigma\,\overline M_{se}^\top.
+\end{equation}
+Define also
+\[
+V_{t,i}:=\overline M_{se}\,\overline\Sigma\,\symfun(Q_{t,i})\,\overline\Sigma\,\overline M_{se}^\top,\qquad
+V_{tp,i}:=\symfun \Big(\overline M_{se}\,\overline\Sigma\,\symfun(Q_{t,i})\,\overline\Sigma\,\symfun(Q_{p,i})\,\overline\Sigma\,\overline M_{se}^\top\Big),
+\]
+so that
+\begin{equation}\label{eq:trace_to_quad_forms}
+\tr(\overline\Sigma\,\symfun(Q_{t,i})\,\overline\Sigma\,H(s_0))=s_0^\top V_{t,i}s_0,\qquad
+\tr(\overline\Sigma\,\symfun(Q_{t,i})\,\overline\Sigma\,\symfun(Q_{p,i})\,\overline\Sigma\,H(s_0))=s_0^\top V_{tp,i}s_0.
+\end{equation}
+
+\emph{Step 1: expand the $k=3$ term.}
+By Lemma~\ref{lem:IS_shorthand} (the $k=3$ case) with $\Omega=\overline\Sigma$,
+\begin{align}
+\mathrm{IS}_{\overline\Sigma} \big(\symfun(Q_{t,i}),\symfun(Q_{p,i}),H(s_0)\big)
+&=\tr(\overline\Sigma\,Q_{t,i})\,\tr(\overline\Sigma\,Q_{p,i})\,c(s_0)
++2\,\tr(\overline\Sigma\,Q_{t,i}\,\overline\Sigma\,Q_{p,i})\,c(s_0)\notag\\
+&\quad
++2\,\tr(\overline\Sigma\,Q_{t,i}\,\overline\Sigma\,H(s_0))\,\tr(\overline\Sigma\,Q_{p,i})
++2\,\tr(\overline\Sigma\,Q_{p,i}\,\overline\Sigma\,H(s_0))\,\tr(\overline\Sigma\,Q_{t,i})\notag\\
+&\quad
++8\,\tr(\overline\Sigma\,Q_{t,i}\,\overline\Sigma\,Q_{p,i}\,\overline\Sigma\,H(s_0)).
+\label{eq:IS3_QQH_expand}
+\end{align}
+Under $\overline\Sigma=I_T\otimes\Sigma$,
+\[
+\tr(\overline\Sigma\,Q_{t,i})=\sigma_i^2,\qquad
+\tr(\overline\Sigma\,Q_{t,i}\,\overline\Sigma\,Q_{p,i})=\mathbf 1_{\{t=p\}}\sigma_i^4.
+\]
+Multiplying by $d_i^2=\sigma_i^{-4}$ and using \eqref{eq:trace_to_quad_forms} gives
+\begin{align}
+d_i^2\,\mathrm{IS}_{\overline\Sigma} \big(Q_{t,i},Q_{p,i},H(s_0)\big)
+&=c(s_0)+2\,\mathbf 1_{\{t=p\}}\,c(s_0)
++2d_i\,s_0^\top V_{t,i}s_0
++2d_i\,s_0^\top V_{p,i}s_0
++8d_i^2\,s_0^\top V_{tp,i}s_0.
+\label{eq:di2_IS3_simplified}
+\end{align}
+Summing \eqref{eq:di2_IS3_simplified} over $i$ yields
+\begin{align}
+\sum_{i=1}^m d_i^2\,\mathrm{IS}_{\overline\Sigma} \big(\symfun(Q_{t,i}),\symfun(Q_{p,i}),H(s_0)\big)
+&= m\,c(s_0)+2m\,\mathbf 1_{\{t=p\}}\,c(s_0)
++2\,s_0^\top\Big(\sum_{i=1}^m d_i V_{t,i}\Big)s_0
++2\,s_0^\top\Big(\sum_{i=1}^m d_i V_{p,i}\Big)s_0\notag\\
+&\quad
++8\,s_0^\top\Big(\sum_{i=1}^m d_i^2 V_{tp,i}\Big)s_0.
+\label{eq:sum_di2_IS3}
+\end{align}
+
+\emph{Step 2: expand the $k=2$ terms.}
+By Lemma~\ref{lem:IS_shorthand} (the $k=2$ case),
+\begin{equation}\label{eq:IS2_WH}
+\mathrm{IS}_{\overline\Sigma} \big(W^\ell_t,H(s_0)\big)
+=\tr(\overline\Sigma\,W^\ell_t)\,c(s_0)+2\,\tr(\overline\Sigma\,W^\ell_t\,\overline\Sigma\,H(s_0)).
+\end{equation}
+Under $\overline\Sigma=I_T\otimes\Sigma$ and $W^\ell_t=\Pi_t^\top\Sigma^{-1}\Pi_t$,
+\[
+\tr(\overline\Sigma\,W^\ell_t)=\tr(\Sigma\,\Sigma^{-1})=m,
+\]
+and
+\begin{equation}\label{eq:trace_WtH_to_quad}
+\tr(\overline\Sigma\,W^\ell_t\,\overline\Sigma\,H(s_0))
+=s_0^\top\Big(\overline M_{se}\,\overline\Sigma\,W^\ell_t\,\overline\Sigma\,\overline M_{se}^\top\Big)s_0.
+\end{equation}
+Thus
+\begin{equation}\label{eq:IS2_WH_simplified}
+\mathrm{IS}_{\overline\Sigma} \big(W^\ell_t,H(s_0)\big)
+=m\,c(s_0)+2\,s_0^\top\Big(\overline M_{se}\,\overline\Sigma\,W^\ell_t\,\overline\Sigma\,\overline M_{se}^\top\Big)s_0,
+\end{equation}
+and similarly for $p$.
+
+\emph{Step 3: cancellation via $\sum_i d_i Q_{t,i}=W^\ell_t$.}
+Note that
+\[
+\sum_{i=1}^m d_i\,Q_{t,i}
+=\Pi_t^\top\Big(\sum_{i=1}^m d_i e_ie_i^\top\Big)\Pi_t
+=\Pi_t^\top \Sigma^{-1} \Pi_t
+=W^\ell_t.
+\]
+Therefore
+\begin{equation}\label{eq:key_identity_sumdiVti}
+\sum_{i=1}^m d_i\,V_{t,i}
+=\overline M_{se}\,\overline\Sigma\,W^\ell_t\,\overline\Sigma\,\overline M_{se}^\top,
+\qquad
+\sum_{i=1}^m d_i\,V_{p,i}
+=\overline M_{se}\,\overline\Sigma\,W^\ell_p\,\overline\Sigma\,\overline M_{se}^\top.
+\end{equation}
+
+\emph{Step 4: assemble \eqref{eq:Dtp_ell_cond}.}
+Substituting \eqref{eq:sum_di2_IS3}, \eqref{eq:IS2_WH_simplified}, and $\mathrm{IS}_{\overline\Sigma}(H(s_0))=c(s_0)$,
+and using the cancellation \eqref{eq:key_identity_sumdiVti}, the bracket in \eqref{eq:Dtp_ell_cond} reduces to
+\[
+2m\,\mathbf 1_{\{t=p\}}\,c(s_0)+8\,s_0^\top\Big(\sum_{i=1}^m d_i^2 V_{tp,i}\Big)s_0.
+\]
+Hence
+\[
+E^{\ell}_{4,tp}
+=4\,\mathbb E_{s_0} \left[2m\,\mathbf 1_{\{t=p\}}\,c(s_0)+8\,s_0^\top\Big(\sum_{i=1}^m d_i^2 V_{tp,i}\Big)s_0\right].
+\]
+Using Lemma~\ref{lem:IS_shorthand} (the $k=1$ case) with $\Omega=\Sigma_0$ yields
+\begin{equation}\label{eq:Dtp_ell_final}
+E^{\ell}_{4,tp}
+=
+8m\,\mathbf 1_{\{t=p\}}\;\mathrm{IS}_{\Sigma_0}(V_0)
+\;+\;
+32\sum_{i=1}^m d_i^2\,\mathrm{IS}_{\Sigma_0} \big(V_{tp,i}\big).
+\end{equation}
+Moreover, under $\overline\Sigma=I_T\otimes\Sigma$ the matrices $Q_{t,i}$ and $Q_{p,i}$ occupy disjoint time blocks when
+$t\neq p$, which implies $V_{tp,i}=0$ for $t\neq p$.
+
+\paragraph{Conclusion.}
+The $K$-part decomposes as
+\[
+\mathbb E\big[\|\widehat G_K\|_{\mathrm{F}}^2\big]
+=\sum_{t,p=0}^{T-1}\big(E^{K}_{1,tp}+E^{K}_{2,tp}+E^{K}_{3,tp}+E^{K}_{4,tp}+E^{K}_{5,tp}+E^{K}_{6,tp}\big),
+\]
+with  $E^{K}_{i,tp}, i = 1,...,6$ given by \eqref{eq:E1tp_final}, \eqref{eq:E2tp_final}, \eqref{eq:E3tp_final}, \eqref{eq:Dtp_final}, \eqref{eq:Etp_final}, \eqref{eq:Ftp_final},
+The $\ell$-part decomposes as
+\[
+\mathbb E\big[\|\widehat G_{\ell}\|_2^2\big]
+=\sum_{t,p=0}^{T-1}\big(E^{\ell}_{1,tp}+E^{\ell}_{2,tp}+E^{\ell}_{3,tp}+E^{\ell}_{4,tp}\big),
+\]
+with $E^{\ell}_{1,tp}$, $E^{\ell}_{2,tp}$, $E^{\ell}_{3,tp}$, $E^{\ell}_{4,tp}$ given by
+\eqref{eq:Atp_ell_final}, \eqref{eq:Btp_ell_final}, \eqref{eq:Ctp_ell_final}, \eqref{eq:Dtp_ell_final}.
+This completes the proof.
+\end{proof}
+
+
+\section{Proof of Corollary~\ref{cor:lqg_stationary}}
+\label{sec:app-proof-lqg-stationary}
+
+\begin{proof}
+From Theorem~\ref{thm:lqr-variance-T-compose}, the mean gradient with respect to $\ell$ is
+\[
+\nabla_{\ell} J_T
+=
+-2\,\mathrm{diag} \Big(\Sigma\sum_{t=0}^{T-1}\gamma^t\big( Q_a + \gamma B^\top \Lambda_{t+1} B \big)\Big).
+\]
+Define
+\[
+M := \sum_{t=0}^{T-1}\gamma^t\big( Q_a + \gamma B^\top \Lambda_{t+1} B \big).
+\]
+Then $\nabla_\ell J_T=0$ is equivalent to $\mathrm{diag}(\Sigma M)=0$.
+
+As $\Sigma=\mathrm{diag}(\sigma^2)$ is diagonal, for each $i\in[m]$,
+\[
+0=(\Sigma M)_{ii}=\Sigma_{ii}M_{ii}.
+\]
+Since $Q_a\succ 0$ and $\Lambda_{t+1}\succeq 0$, we have
+$Q_a+\gamma B^\top \Lambda_{t+1}B \succ 0$ for every $t$, hence $M\succ 0$ and in particular
+$M_{ii}>0$ for all $i$. Therefore $\Sigma_{ii}=0$ for all $i$, i.e.\ $\Sigma=\mathbf 0$.
+
+Conversely, if $\Sigma=\mathbf 0$, then $\nabla_\ell J_T=0$ follows immediately from the formula above.
+\end{proof}

@@ -1,0 +1,284 @@
+%!TEX root = ../main.tex
+\section{Proof of Theorem \ref{thm:lqr-lift} }
+\label{sec:app-proof-lqg-lift}
+
+\begin{proof}
+    From
+      \[
+      \bar s=\mathcal F_S s_0+\mathcal F_E \bar\varepsilon,\qquad
+      \bar s^+=\mathcal F_S^+ s_0+\mathcal F_E^+ \bar\varepsilon,\qquad
+      \bar a=\mathcal K_S s_0+\mathcal K_E \bar\varepsilon,
+      \]
+    and using $s_{t+1} = F s_t + B \varepsilon_t$, we write out the explicit forms:
+      
+    \medskip
+    \noindent\textbf{State maps.}
+    \begin{align}\label{eq:lqr-lift-state-maps}
+      \mathcal F_S=\begin{bmatrix}
+      I\\[2pt] F\\[2pt] F^2\\[-2pt]\vdots\\[2pt] F^{T-1}
+      \end{bmatrix}\!\in\mathbb R^{nT\times n},
+      \qquad
+      \mathcal F_S^+=\begin{bmatrix}
+      F\\[2pt] F^2\\[-2pt]\vdots\\[2pt] F^{T}
+      \end{bmatrix}\!\in\mathbb R^{nT\times n},
+    \end{align}
+  
+    \[
+    \mathcal F_E=
+    \begin{bmatrix}
+    \;0\;&\;0\;&\cdots&\;0&\;0\\
+    B&0&\cdots&0&0\\
+    FB&B&\ddots&\vdots&0\\
+    \vdots&\ddots&\ddots&0&0\\
+    F^{T-2}B&\cdots&FB&B&0 
+    \end{bmatrix}\!\in\mathbb R^{nT\times mT},
+    \qquad
+    \mathcal F_E^+=
+    \begin{bmatrix}
+    B&0&\cdots&0\\
+    FB&B&\ddots&\vdots\\
+    \vdots&\ddots&\ddots&0\\
+    F^{T-1}B&\cdots&FB&B
+    \end{bmatrix}\!\in\mathbb R^{nT\times mT}.
+    \]
+    Equivalently, for \(t,i\in\{1,\ldots,T\}\),
+    \[
+    [\mathcal F_E]_{t,i}=
+    \begin{cases}
+    F^{\,t-1-i}B,& i\le t-1,\\[2pt]
+    0,& i\ge t,
+    \end{cases}
+    \qquad
+    [\mathcal F_E^+]_{t,i}=
+    \begin{cases}
+    F^{\,t-i}B,& i\le t,\\[2pt]
+    0,& i>t.
+    \end{cases}
+    \]
+    
+    \medskip
+    \noindent\textbf{Action maps.}
+  
+    \[
+    \mathcal K_S=
+    \begin{bmatrix}
+    K\\[2pt] KF\\[-2pt]\vdots\\[2pt] KF^{T-1}
+    \end{bmatrix}\!\in\mathbb R^{mT\times n},
+    \qquad
+    \mathcal K_E=
+    \begin{bmatrix}
+    I_m&0&\cdots&0&0\\
+    KB&I_m&\ddots&\vdots&0\\
+    KFB&KB&\ddots&0&0\\
+    \vdots&\ddots&\ddots&I_m&0\\
+    KF^{T-2}B&\cdots&KFB& KB&I_m
+    \end{bmatrix}\!\in\mathbb R^{mT\times mT}.
+    \]
+    Equivalently, for \(t,i\in\{1,\ldots,T\}\),
+    \[
+    [\mathcal K_E]_{t,i}=
+    \begin{cases}
+    K F^{\,t-1-i} B,& i\le t-1,\\[2pt]
+    I_m,& i=t,\\[2pt]
+    0,& i>t.
+    \end{cases}
+    \]
+\end{proof}
+
+
+
+
+%%%%%%%%% remark
+%%%%%%%%%
+%%%%%%%%%
+%%%%%%%%%
+
+
+
+% \section{Proof of Theorem \ref{thm:lqg-variance-T} }
+% \label{sec:app-proof-lqg-variance-T}
+
+% \begin{proof}
+    
+% Note that to use Theorem~\ref{thm:lqg-variance-one-step}, we need to separate $\bar s$ into $s_0$ and $\bar \varepsilon$ parts.
+% \[
+% \nabla_{\tilde K}\log\pi(\bar a\mid \bar s)=\overline\Sigma^{-1}\bar\varepsilon\,\bar s^\top = \overline\Sigma^{-1}\bar\varepsilon\, (s_0^\top \mathcal F_s^\top+\bar\varepsilon^\top \mathcal F_E^\top ),\qquad
+% \]
+
+% Let $\mathcal P$ be the linear map that
+% keeps the $T$ diagonal $m\times n$ blocks of an $(mT)\times(nT)$ matrix and sums them:
+% \[
+% \mathcal P(M):=\sum_{t=0}^{T-1} M_{tt}\in\mathbb R^{m\times n},\qquad
+% \|\mathcal P\|_{F\to F}\le \sqrt{T}.
+% \]
+% The shared-$K$ (original) REINFORCE estimator can be written as
+% \[
+% \widehat G_K
+% =\mathcal P\!\Big((\overline\Sigma^{-1}\bar\varepsilon)\,\bar s^{\!\top}\Big)\,R_T
+% =\underbrace{\mathcal P\!\Big((\overline\Sigma^{-1}\bar\varepsilon)s_0^{\!\top}\mathcal F_S^{\!\top}\Big)}_{=:A}\,R_T
+% +\underbrace{\mathcal P\!\Big((\overline\Sigma^{-1}\bar\varepsilon)\bar\varepsilon^{\!\top}\mathcal F_E^{\!\top}\Big)}_{=:B}\,R_T .
+% \]
+% Thus $\widehat G_K=(A+B)\,R_T$ with
+% \[
+% A=\mathcal P\!\Big((\overline\Sigma^{-1}\bar\varepsilon)s_0^{\!\top}\mathcal F_S^{\!\top}\Big),\qquad
+% B=\mathcal P\!\Big((\overline\Sigma^{-1}\bar\varepsilon)\bar\varepsilon^{\!\top}\mathcal F_E^{\!\top}\Big).
+% \]
+
+
+% Using $\|X+Y\|_{\mathrm{F}}^2\le 2\|X\|_{\mathrm{F}}^2+2\|Y\|_{\mathrm{F}}^2$.
+
+% \[
+% \Var_F(\widehat G_K) = \mathbb E[||\widehat G_K - \mathbb E [\widehat G_K]||_F^2] = \mathbb E[||AR_T - \mathbb E [AR_T] + BR_T - \mathbb E [BR_T]||_F^2]
+% \;\le\;2\,\mathbb E\!\big[\|A\|_{\mathrm{F}}^2\,\tilde R_T^{\,2}\big]\;+\;2\,\mathbb E\!\big[\|B\|_{\mathrm{F}}^2\,\tilde R_T^{\,2}\big],
+% \]
+
+% Using $\|\mathcal P(MC)\|_{\mathrm{F}}\le \|\mathcal P\|_{F\to F}\,\|M\|_{\mathrm{F}}\,\|C\|_2$ gives
+% \[
+% \|A\|_{\mathrm{F}}\le \sqrt{T}\,\|\overline\Sigma^{-1}\bar\varepsilon\,s_0^{\!\top}\|_{\mathrm{F}}\,\|\mathcal F_S\|_2,\qquad
+% \|B\|_{\mathrm{F}}\le \sqrt{T}\,\|\overline\Sigma^{-1}\bar\varepsilon\,\bar\varepsilon^{\!\top}\|_{\mathrm{F}}\,\|\mathcal F_E\|_2.
+% \]
+% Therefore
+% \begin{equation}\label{eq:K-variance-split}
+% \Var_F(\widehat G_K)
+% \;\le\;2T\,\|\mathcal F_S\|_2^2\,\underbrace{\mathbb E\!\big[\|\overline\Sigma^{-1}\bar\varepsilon\,s_0^{\!\top}\|_{\mathrm{F}}^2\,R_T^{\,2}\big]}_{(\star)}
+% \;+\;2T\,\|\mathcal F_E\|_2^2\,\underbrace{\mathbb E\!\big[\|\overline\Sigma^{-1}\bar\varepsilon\,\bar\varepsilon^{\!\top}\|_{\mathrm{F}}^2\,R_T^{\,2}\big]}_{(\dagger)} .
+% \end{equation}
+
+% The factor inside $(\star)$ is exactly of the one-step form with the lifted blocks
+% \((\overline M_{ss},\overline M_{se},\overline M_{ee})\) from Theorem~\ref{thm:lqr-lift} and noise covariance \(\overline\Sigma\).
+% Thus can be directly bounded by Theorem~\ref{thm:lqg-variance-one-step}.
+
+% Term $(\dagger)$ can be bounded using the same technic as in Theorem~\ref{thm:lqg-variance-one-step}. To write everything down:
+
+% \begin{align}
+%   (\star) &= A_\star + B_\star + C_\star + D_\star,\quad\\
+%   (\dagger) &= A_\dagger + B_\dagger + C_\dagger + D_\dagger,\\
+%   A_\star
+% &=\tr(\overline\Sigma^{-1})\Big[
+%       \tr(\Sigma_0)\,\tr(\Sigma_0 \overline M_{ss})^2
+%       +4\,\tr(\Sigma_0^2 \overline M_{ss})\,\tr(\Sigma_0 \overline M_{ss})
+%       +2\,\tr(\Sigma_0 \overline M_{ss}\Sigma_0 \overline M_{ss})\,\tr(\Sigma_0) \notag \\
+%       &~+8\,\tr(\Sigma_0^2 \overline M_{ss}\Sigma_0 \overline M_{ss})
+%     \Big],\\[4pt]
+% B_\star
+% &=\tr(\Sigma_0)\Big[
+%       8\,\tr(\overline\Sigma^{-1}\overline M_{ee}\,\overline\Sigma\,\overline M_{ee}\,\overline\Sigma)
+%       +4\,\tr(\overline\Sigma^{-1}\overline M_{ee}\,\overline\Sigma)\,\tr(\overline\Sigma\,\overline M_{ee})
+%       +2\,\tr(\overline\Sigma\,\overline M_{ee}\,\overline\Sigma\,\overline M_{ee})\,\tr(\overline\Sigma^{-1}) \notag \\
+%       &~+\tr(\overline\Sigma^{-1})\,\tr(\overline\Sigma\,\overline M_{ee})^2
+%     \Big],\\[4pt]
+% C_\star
+% &=2\Big[
+%       2\,\tr(\Sigma_0^2 \overline M_{ss})+\tr(\Sigma_0)\tr(\Sigma_0 \overline M_{ss})
+%     \Big]\Big[
+%       2\,\tr(\overline\Sigma^{-1}\overline M_{ee}\,\overline\Sigma)+\tr(\overline\Sigma^{-1})\tr(\overline\Sigma\,\overline M_{ee})
+%     \Big],\\[4pt]
+% D_\star
+% &=4\Big\{
+%       2\big[\,2\,\tr(\Sigma_0^2 \overline U)+\tr(\Sigma_0)\tr(\Sigma_0 \overline U)\big]
+%       +\tr(\overline\Sigma^{-1})\big[\,2\,\tr(\Sigma_0^2 \overline V)+\tr(\Sigma_0)\tr(\Sigma_0 \overline V)\big]
+%     \Big\}.\\[6pt]
+%     A_\dagger
+%     &=\big(2\tr(I_{mT})+\tr(\overline\Sigma^{-1})\,\tr(\overline\Sigma)\big)
+%        \Big[\,2\,\tr(\Sigma_0 \overline M_{ss}\Sigma_0 \overline M_{ss})+\tr(\Sigma_0 \overline M_{ss})^2\Big],\\[6pt]
+%     C_\dagger
+%     &=2\,\tr(\Sigma_0 \overline M_{ss})\Big[
+%           8\,\tr(\overline M_{ee}\,\overline\Sigma)
+%           +2\Big(\tr(I_{mT})\,\tr(\overline M_{ee}\,\overline\Sigma)
+%                   +\tr(\overline\Sigma^{-1}\overline M_{ee}\,\overline\Sigma)\,\tr(\overline\Sigma) \notag \\
+%                   &~+\tr(\overline\Sigma\,\overline M_{ee}\,\overline\Sigma)\,\tr(\overline\Sigma^{-1})\Big)
+%           +\tr(\overline\Sigma^{-1})\,\tr(\overline\Sigma)\,\tr(\overline M_{ee}\,\overline\Sigma)
+%        \Big],\\[6pt]
+%     D_\dagger
+%     &=4\Big\{
+%           8\,\tr(\Sigma_0 \overline V)
+%           +2\Big(\tr(I_{mT})\,\tr(\Sigma_0 \overline V)
+%                   +\tr(\Sigma_0 \overline U)\,\tr(\overline\Sigma)
+%                   +\tr(\Sigma_0 \overline W)\,\tr(\overline\Sigma^{-1})\Big) \notag \\
+%           &+\tr(\overline\Sigma^{-1})\,\tr(\overline\Sigma)\,\tr(\Sigma_0 \overline V)
+%        \Big\},\\[6pt]
+%     B_\dagger
+%     &=\Psi_4\!\big(\overline\Sigma^{-2},\,I_{mT},\,\overline M_{ee},\,\overline M_{ee}\big).
+% \end{align}
+% where 
+% \[
+% \Psi_4(A,B,C,D)
+% :=\mathbb E\big[(\bar\varepsilon^\top A\bar\varepsilon)(\bar\varepsilon^\top B\bar\varepsilon)
+%                 (\bar\varepsilon^\top C\bar\varepsilon)(\bar\varepsilon^\top D\bar\varepsilon)\big],
+% \]
+% \[
+% \overline U := \overline M_{se}\,\overline M_{se}^{\!\top},\qquad
+% \overline V := \overline M_{se}\,\overline\Sigma\,\overline M_{se}^{\!\top},\qquad
+% \overline W := \overline M_{se}\,\overline\Sigma^{2}\,\overline M_{se}^{\!\top}.
+% \]
+% \end{proof}
+
+
+
+% \section{Proof of Theorem \ref{thm:lqr-lifted-state-maps} }
+% \label{sec:app-proof-lqr-lifted-state-maps}
+
+% \begin{proof}
+    
+% From \eqref{eq:lqr-lift-state-maps}, we have the following summation formulas:
+% \begin{equation}\label{eq:FS-gramians}
+% \mathcal F_S^\top\mathcal F_S=\sum_{t=0}^{T-1}(F^\top)^t F^t,
+% \qquad
+% \mathcal F_S^{+\top}\mathcal F_S^+=\sum_{t=1}^{T}(F^\top)^t F^t.
+% \end{equation}
+% Consequently, for the spectral norm $\|\cdot\|_2$,
+% \begin{align}
+% \max_{0\le t\le T-1}\|F^t\|_2^2
+% \;\le\;
+% \|\mathcal F_S\|_2^2
+% \;\le\;
+% \sum_{t=0}^{T-1}\|F^t\|_2^2, \label{eq:FS-sandwich}\\[4pt]
+% \max_{1\le t\le T}\|F^t\|_2^2
+% \;\le\;
+% \|\mathcal F_S^+\|_2^2
+% \;\le\;
+% \sum_{t=1}^{T}\|F^t\|_2^2. \label{eq:FSp-sandwich}
+% \end{align}
+
+% Each summand $(F^t)^\top F^t\succeq 0$, so by Loewner order
+% \(
+% (F^{t_0})^\top F^{t_0}\preceq \sum_{t}(F^t)^\top F^t
+% \)
+% for any $t_0$, which gives the lower bounds in
+% \eqref{eq:FS-sandwich}–\eqref{eq:FSp-sandwich} after taking spectral norms.
+% For the upper bounds, use the triangle inequality and submultiplicativity:
+% \[
+% \Big\|\sum_t (F^t)^\top F^t\Big\|_2
+% \le \sum_t \|(F^t)^\top F^t\|_2
+% \le \sum_t \|F^t\|_2^2.
+% \]
+% Thus, $\|\mathcal F_S\|_2^2$ is of order $O(T)$ if $\rho(F)=1$; of order $O(1)$ if $\rho(F)<1$; and of order $O(\rho(F)^{2T})$ if $\rho(F)>1$.
+
+% Similar analysis applies to $\mathcal F_E$ and $\mathcal F_E^+$: Note that $ \|\mathcal F_E\|_2 \leq  \|\mathcal F_E^+\|_2$ because $\mathcal F_E$ is just a "shift-down" of $\mathcal F_E^+$. $||\mathcal F_E v|| = ||\mathcal F_E^+ \mathcal S v||$, here $\mathcal S$ is a "shift-down" operator, thus by definition of operator norm, we have $ \|\mathcal F_E\|_2 \leq  \|\mathcal F_E^+\|_2$.
+
+% For $k\ge 1$ define the partial observability Gramian
+% \[
+% W_k := \sum_{s=0}^{k-1}(F^\T)^s F^s \in \mathbb R^{n\times n}.
+% \]
+% By definition,
+% \[
+% \big[(\calF_E^+)^\T \calF_E^+\big]_{i,j}
+% = \sum_{t=1}^{T} \big([\calF_E^+]_{t,i}\big)^\T \,[\calF_E^+]_{t,j}
+% = \sum_{t=\max\{i,j\}}^{T} (F^{\,t-i}B)^\T (F^{\,t-j}B).
+% \]
+% For $i\le j$,
+% \[
+% \sum_{t=j}^{T} B^\T (F^\T)^{\,t-i} F^{\,t-j} B
+% = B^\T (F^\T)^{\,j-i} \Big(\sum_{s=0}^{T-j} (F^\T)^{\,s} F^{\,s}\Big) B
+% = B^\T (F^\T)^{\,j-i} W_{T-j+1} B,
+% \]
+% which is \eqref{eq:block-formula}. The $j<i$ case follows by symmetry.
+% Then for $1\le i\le j\le T$,
+% \begin{equation}\label{eq:block-formula}
+% \big[(\calF_E^+)^\T \calF_E^+\big]_{i,j} \;=\;
+% B^\T (F^\T)^{\,j-i}\, W_{T-j+1}\, B,
+% \qquad
+% \big[(\calF_E^+)^\T \calF_E^+\big]_{j,i} \;=\; \big(\big[(\calF_E^+)^\T \calF_E^+\big]_{i,j}\big)^\T .
+% \end{equation}
+
+% \end{proof}

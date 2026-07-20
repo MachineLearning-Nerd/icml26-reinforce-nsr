@@ -1,0 +1,20 @@
+{
+  "space_id": "DineshAI/Ol99zoW31J",
+  "openreview_id": "Ol99zoW31J",
+  "arxiv_id": "2602.01460",
+  "tags": [
+    "icml2026-repro",
+    "paper-Ol99zoW31J"
+  ],
+  "emoji": "🎯",
+  "created_at": "2026-07-20T07:35:49+00:00",
+  "last_page": "conclusion",
+  "local_path_artifacts": [
+    {
+      "path": "outputs/evidence_bundle.jsonl",
+      "abs_path": "/home/dineshai/Drives/Code/AllCode/ReproduceICML/papers/icml26-repro-Ol99zoW31J-reinforce-nsr/outputs/evidence_bundle.jsonl",
+      "size": 3289,
+      "artifact_type": "dataset"
+    }
+  ]
+}

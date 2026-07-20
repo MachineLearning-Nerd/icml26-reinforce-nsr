@@ -1,0 +1,37 @@
+%!TEX root = ../main.tex
+\vspace{-2mm}
+\section{Discussion and Conclusions}
+\vspace{-2mm}
+\label{sec:conclusions}
+% \enlargethispage{3\baselineskip}
+
+We studied the non-uniformity of the noise-to-signal ratio (NSR) of the REINFORCE estimator. For finite-horizon linear systems with linear-Gaussian policies and polynomial systems with Gaussian policies and polynomial feedback, we characterized NSR exactly, either in closed form or via moment-evaluation algorithms. For nonlinear dynamics with expressive Gaussian policies, we derived a general variance upper bound. These results show that NSR varies sharply across policy parameters and typically increases as policies approach optimality, sometimes diverging. This provides a concrete explanation for the oscillations and occasional policy collapse observed in our experiments.
+
+\textbf{Baselines and actor--critic methods.}
+Baselines can substantially reduce NSR, but they do not automatically remove the small-covariance pathology. For a baseline estimator, the return target is replaced by the residual $\delta_t := G_t - b_t(s_t)$ where $b_t(s_t)$ is the baseline. In finite-horizon LQG, an exact quadratic baseline can cancel the state-only component of the return when $\Sigma=\sigma^2 I$ and $\sigma\to 0$, thus the resulting estimator becomes $O(1)$ rather than $O(\sigma^{-1})$. However, this cancellation is fragile. If the baseline has approximation error that remains $O(1)$ as $\sigma\to 0$, then the residual remains $O(1)$ and the same small-covariance blow-up can persist. This suggests that approximate learned baselines and critics may reduce NSR in practice, but avoiding the blow-up generally requires sufficiently accurate value-function approximation. A similar interpretation applies to actor--critic estimators.
+
+\textbf{Entropy regularization.}
+Entropy regularization provides a complementary stabilization mechanism by discouraging premature collapse of the policy covariance. For the entropy-regularized objective
+\[
+    J_\tau(K,\Sigma)
+    :=
+    J(K,\Sigma)
+    + \tau \mathbb{E}\!\left[
+        \sum_{t=0}^{T-1} \gamma^t
+        H(\pi(\cdot\mid s_t))
+    \right], \tau>0,
+\]
+the Gaussian entropy term is explicit in the log-standard deviation. In the diagonal covariance case, the stationary covariance satisfies
+\[
+    \Sigma^\star_{ii}
+    =
+    \frac{\tau \sum_{t=0}^{T-1}\gamma^t}{2M_{ii}(K^\star)},~~ M(K)
+    :=
+    \sum_{t=0}^{T-1}\gamma^t
+    \bigl(
+    Q_a + \gamma B^\top \Lambda_{t+1} B
+    \bigr).
+\]
+Thus entropy regularization yields a strictly positive target covariance. Plugging this covariance into our exact variance/NSR expressions can be used to select an entropy coefficient or covariance floor corresponding to a desired NSR level. However, if stochastic updates drive the policy covariance far below its entropy-regularized target, the policy can still enter a high-NSR region and become unstable.
+
+Our findings suggest several promising directions for future work. First, developing variance-reduction techniques tailored to high-NSR regimes could improve optimization stability. Second, extending our analysis beyond Gaussian policies to other policy distributions, such as uniform or $\beta$-distributions, would help assess the generality of our conclusions. Third, studying the interaction between NSR and exploration mechanisms, including adaptive covariance and entropy control, may lead to more robust reinforcement-learning algorithms. Finally, while our experiments show that large NSR can induce instability, and our SGD analysis demonstrates that noisy updates have a positive probability of escaping an arbitrarily large ball, a formal characterization of the relationship between the NSR landscape and instability in policy optimization remains an open question.

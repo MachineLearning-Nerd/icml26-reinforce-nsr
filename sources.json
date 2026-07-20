@@ -1,0 +1,14 @@
+{
+  "paper": {
+    "openreview_id": "Ol99zoW31J",
+    "arxiv_id": "2602.01460v3",
+    "arxiv_source_sha256": "de620c3c2a99639010e9338e336ebe4ed79cbdf263761efb9eabc71322a9152d"
+  },
+  "anchors": {
+    "main.tex": "e8ef3aebb0e9283c93aca97c350893f4cf5dffea8ce32baa0c0762e275c5f27c",
+    "sections/lqg.tex": "424e862b4297defbfcacf75ffef81b0381ef5ee5b6bf4b86059edbef85c9c7fb",
+    "sections/nonlinear_new.tex": "558392eb62a93ec68ecebf94db516ab2dffdc9310905c8a1724c5185b6edfb1b",
+    "sections/app-proof-nonlinear-upperbound.tex": "11ece2dad7fac254e2aa0a2439caee4bc5d8e545cadb9b20f0eeb4b3c4ecbe83"
+  },
+  "implementation": "No author repository was identified in the primary source; all verifier code is clean-room."
+}

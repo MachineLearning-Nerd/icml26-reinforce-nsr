@@ -1,0 +1,155 @@
+%!TEX root = ../main.tex
+\section{Proof of Theorem \ref{thm:nonlinear-bound} }
+\label{sec:app-proof-nonlinear-upperbound}
+
+\begin{proof}
+We prove \eqref{eq:E2_theta} and \eqref{eq:E2_ell} separately.
+
+\paragraph{Part (i): proof of \eqref{eq:E2_theta}.}
+Let
+\[
+u(\tau):=\sum_{t=0}^{T-1} J_\theta(s_t)^\top \Sigma^{-1}\varepsilon_t,
+\qquad\text{so that}\qquad
+\widehat G_\theta(\tau)=R(\tau)\,u(\tau).
+\]
+\emph{Step 1 (sum-of-norms).}
+Using $\big\|\sum_{t=0}^{T-1} x_t\big\|_2^2 \le T\sum_{t=0}^{T-1}\|x_t\|_2^2$,
+with $x_t=J_\theta(s_t)^\top \Sigma^{-1}\varepsilon_t$, we have
+\[
+\|u(\tau)\|_2^2 \le T\sum_{t=0}^{T-1}\|J_\theta(s_t)^\top \Sigma^{-1}\varepsilon_t\|_2^2.
+\]
+Hence
+\begin{align}
+\mathbb E\!\left[\|\widehat G_\theta(\tau)\|_2^2 \,\middle|\, s_0\right]
+&=
+\mathbb E\!\left[R(\tau)^2\|u(\tau)\|_2^2 \,\middle|\, s_0\right] \nonumber\\
+&\le
+T\sum_{t=0}^{T-1}
+\mathbb E\!\left[R(\tau)^2\|J_\theta(s_t)^\top \Sigma^{-1}\varepsilon_t\|_2^2 \,\middle|\, s_0\right].
+\label{eq:step1}
+\end{align}
+
+\emph{Step 2 (operator/Frobenius bound).}
+For each $t$,
+\[
+\|J_\theta(s_t)^\top \Sigma^{-1}\varepsilon_t\|_2
+\le \|J_\theta(s_t)\|_{\mathrm{F}}\,\|\Sigma^{-1}\|_2\,\|\varepsilon_t\|_2,
+\]
+Plugging into \eqref{eq:step1} gives
+\begin{equation}
+\label{eq:step2}
+\mathbb E\!\left[\|\widehat G_\theta(\tau)\|_2^2 \,\middle|\, s_0\right]
+\le
+T\|\Sigma^{-1}\|_2^2\sum_{t=0}^{T-1}
+\mathbb E\!\left[R(\tau)^2\|J_\theta(s_t)\|_{\mathrm{F}}^2\|\varepsilon_t\|_2^2 \,\middle|\, s_0\right].
+\end{equation}
+
+\emph{Step 3 (Cauchy--Schwarz).}
+For each $t$, apply Cauchy--Schwarz with
+$X=R(\tau)^2$ and $Y=\|J_\theta(s_t)\|_{\mathrm{F}}^2\|\varepsilon_t\|_2^2$:
+\[
+\mathbb E[XY\mid s_0]\le \sqrt{\mathbb E[X^2\mid s_0]\,\mathbb E[Y^2\mid s_0]}
+=
+\sqrt{\mathbb E[R(\tau)^4\mid s_0]}\,
+\sqrt{\mathbb E[\|J_\theta(s_t)\|_{\mathrm{F}}^4\|\varepsilon_t\|_2^4\mid s_0]}.
+\]
+Thus \eqref{eq:step2} implies
+\begin{equation}
+\label{eq:step3}
+\mathbb E\!\left[\|\widehat G_\theta(\tau)\|_2^2 \,\middle|\, s_0\right]
+\le
+T\|\Sigma^{-1}\|_2^2\sqrt{\mathbb E[R(\tau)^4\mid s_0]}
+\sum_{t=0}^{T-1}
+\sqrt{\mathbb E[\|J_\theta(s_t)\|_{\mathrm{F}}^4\|\varepsilon_t\|_2^4\mid s_0]}.
+\end{equation}
+
+\emph{Step 4 (independence of $\varepsilon_t$ and $s_t$).}
+Since $s_t$ is a measurable function of $(s_0,\varepsilon_0,\dots,\varepsilon_{t-1})$
+and $\varepsilon_t$ is independent of $(\varepsilon_0,\dots,\varepsilon_{t-1})$,
+we have $\varepsilon_t\perp s_t$ conditional on $s_0$. Therefore
+\[
+\mathbb E[\|J_\theta(s_t)\|_{\mathrm{F}}^4\|\varepsilon_t\|_2^4\mid s_0]
+=
+\mathbb E[\|J_\theta(s_t)\|_{\mathrm{F}}^4\mid s_0]\;\mathbb E[\|\varepsilon\|_2^4].
+\]
+
+\emph{Step 5 (Gaussian fourth moment).}
+For $\varepsilon\sim\mathcal N(0,\Sigma)$,
+\[
+\mathbb E\|\varepsilon\|_2^4
+=
+(\operatorname{tr}\Sigma)^2 + 2\,\operatorname{tr}(\Sigma^2).
+\]
+Substituting the last two displays into \eqref{eq:step3} yields \eqref{eq:E2_theta}.
+\paragraph{Part (ii): proof of \eqref{eq:E2_ell}.}
+Define
+\[
+q(\varepsilon_t):=\nabla_\ell \log\pi(a_t\mid s_t)
+=\Sigma^{-1}(\varepsilon_t\odot\varepsilon_t)-\mathbf 1
+=\big((\varepsilon_t\odot\varepsilon_t)\odot e^{-2\ell}\big)-\mathbf 1\in\mathbb R^m,
+\]
+so that
+\[
+\widehat G_\ell(\tau)=R(\tau)\sum_{t=0}^{T-1} q(\varepsilon_t).
+\]
+
+\emph{Step 1 (sum-of-norms).}
+Using $\big\|\sum_{t=0}^{T-1} x_t\big\|_2^2 \le T\sum_{t=0}^{T-1}\|x_t\|_2^2$ with $x_t=q(\varepsilon_t)$:
+\[
+\|\widehat G_\ell(\tau)\|_2^2
+=
+R(\tau)^2\Big\|\sum_{t=0}^{T-1}q(\varepsilon_t)\Big\|_2^2
+\le
+R(\tau)^2\,T\sum_{t=0}^{T-1}\|q(\varepsilon_t)\|_2^2.
+\]
+Taking $\mathbb E[\cdot\mid s_0]$ and applying Cauchy--Schwarz termwise gives
+\begin{align}
+\mathbb E[\|\widehat G_\ell(\tau)\|_2^2\mid s_0]
+&\le
+T\sum_{t=0}^{T-1}
+\mathbb E\!\left[R(\tau)^2\|q(\varepsilon_t)\|_2^2\mid s_0\right]\nonumber\\
+&\le
+T\sum_{t=0}^{T-1}
+\sqrt{\mathbb E\!\left[R(\tau)^4\mid s_0\right]}\;
+\sqrt{\mathbb E\!\left[\|q(\varepsilon_t)\|_2^4\right]} \nonumber\\
+&=
+T^2\sqrt{\mathbb E\!\left[R(\tau)^4\mid s_0\right]}\;
+\sqrt{\mathbb E\!\left[\|q(\varepsilon)\|_2^4\right]},
+\label{eq:ell_bound_reduce}
+\end{align}
+where the last line uses that $\varepsilon_t$ are i.i.d.
+
+\emph{Step 2 (exact fourth moment of the log-std score).}
+Assume $\ell=\log\sigma$ and $\Sigma=\diag{e^{2\ell}}$ is diagonal. Then $\varepsilon=\diag{e^{\ell}}z$ with $z\sim\mathcal N(0,I_m)$, and elementwise
+\[
+q_i(\varepsilon)=\frac{\varepsilon_i^2}{e^{2\ell_i}}-1=z_i^2-1,
+\]
+so the distribution of $q(\varepsilon)$ does not depend on $\ell$.
+Let $w_i:=(z_i^2-1)^2$. Then
+\[
+\|q(\varepsilon)\|_2^2=\sum_{i=1}^m w_i,
+\qquad
+\|q(\varepsilon)\|_2^4=\left(\sum_{i=1}^m w_i\right)^2
+=\sum_{i=1}^m w_i^2 + 2\sum_{1\le i<j\le m} w_iw_j.
+\]
+Using independence of $(z_i)$, we have $\mathbb E[w_iw_j]=\mathbb E[w_i]\mathbb E[w_j]$ for $i\neq j$.
+Moreover, for $z\sim\mathcal N(0,1)$,
+\[
+\mathbb E[(z^2-1)^2]=2,\qquad \mathbb E[(z^2-1)^4]=60.
+\]
+Therefore
+\[
+\mathbb E\|q(\varepsilon)\|_2^4
+=
+m\cdot 60 + 2\binom{m}{2}\cdot (2\cdot 2)
+=
+4m(m+14).
+\]
+Plugging this into \eqref{eq:ell_bound_reduce} yields
+\[
+\mathbb E[\|\widehat G_\ell(\tau)\|_2^2\mid s_0]
+\le
+2T^2\sqrt{m(m+14)}\;\sqrt{\mathbb E[R(\tau)^4\mid s_0]}.
+\]
+
+\end{proof}

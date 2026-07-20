@@ -1,0 +1,40 @@
+%!TEX root = ../main.tex
+\section{Proof of Proposition~\ref{prop:poly-isserlis}}
+\label{sec:app-proof-poly-isserlis}
+
+\begin{proof}
+\textbf{(i) Polynomial estimator.}
+Since $P(\cdot,\cdot)$ and $\Phi(\cdot)$ are polynomial and $a_t=\Phi(s_t)^\top\theta+\varepsilon_t$,
+a simple induction shows that for each $t\le T$, $s_t$ and $a_t$ are vector-valued polynomials in
+$\xi:=(s_0,\varepsilon_0,\ldots,\varepsilon_{T-1})$.
+Because $r(\cdot,\cdot)$ is polynomial, the return
+$R(\tau)=\sum_{t=0}^{T-1}\gamma^t r(s_{t+1},a_t)$ is also a polynomial in $\xi$.
+Moreover, for the Gaussian policy,
+\[
+\nabla_\theta\log\pi(a_t\mid s_t)=\Phi(s_t)\Sigma^{-1}\varepsilon_t,
+\qquad
+\nabla_{\ell}\log\pi(a_t\mid s_t)=\Sigma^{-1}(\varepsilon_t\odot \varepsilon_t)-\mathbf 1,
+\]
+so $\nabla_\theta\log\pi(a_t\mid s_t)$ and $\nabla_\ell\log\pi(a_t\mid s_t)$ are polynomials in $\xi$.
+Therefore $\widehat G_\theta=\sum_{t=0}^{T-1}\gamma^t R(\tau)\nabla_\theta\log\pi(a_t\mid s_t)$ and
+$\widehat G_\ell=\sum_{t=0}^{T-1}\gamma^t R(\tau)\nabla_\ell\log\pi(a_t\mid s_t)$ are polynomials in $\xi$.
+
+\paragraph{Indexing convention.}
+We use $j$ to index vector coordinates: for $\widehat G_\theta\in\mathbb R^{d}$ and $\widehat G_\ell\in\mathbb R^{m}$,
+$\widehat G_{\theta,j}$ denotes the $j$-th component of $\widehat G_\theta$ (and similarly $\widehat G_{\ell,j}$).
+For monomials, $\alpha\in\mathbb N^{n+mT}$ is a multi-index and $\xi^\alpha:=\prod_{i=1}^{n+mT}\xi_i^{\alpha_i}$.
+
+\textbf{(ii) Exact moments via Isserlis.}
+By construction, $\xi$ is a centered jointly Gaussian vector with covariance
+$\mathrm{Cov}(\xi)=\mathrm{diag}(\Sigma_0,\Sigma,\ldots,\Sigma)$.
+Since $\widehat G_\theta$ (and $\widehat G_\ell$) are polynomials in $\xi$, each admits a finite monomial expansion
+$\widehat G_{\theta,j}(\xi)=\sum_{\alpha} c_{j,\alpha}\,\xi^\alpha$ (and similarly for $\widehat G_{\ell,j}$).
+Therefore $\E[\widehat G_\theta]$ and $\E[\|\widehat G_\theta\|_{\mathrm{F}}^2]$
+(and likewise for $\widehat G_\ell$) reduce to finitely many Gaussian monomial moments $\E[\xi^\alpha]$.
+These moments are given exactly by Isserlis' (Wick) theorem: all odd-order moments vanish, and each even-order moment is
+a sum over pairings of covariance entries determined by $\mathrm{Cov}(\xi)$.
+Thus $\E[\widehat G_\theta]$, $\E[\widehat G_\ell]$, $\E[\|\widehat G_\theta\|_{\mathrm{F}}^2]$, and
+$\E[\|\widehat G_\ell\|_{\mathrm{F}}^2]$ are exactly computable from $\mathrm{Cov}(\xi)$.
+\end{proof}
+
+

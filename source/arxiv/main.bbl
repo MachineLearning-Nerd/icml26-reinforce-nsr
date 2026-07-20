@@ -1,0 +1,243 @@
+\begin{thebibliography}{47}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Agarwal et~al.(2021)Agarwal, Kakade, Lee, and Mahajan]{agarwal21jmlr-tabularglobalconveregnce}
+Agarwal, A., Kakade, S.~M., Lee, J.~D., and Mahajan, G.
+\newblock On the theory of policy gradient methods: Optimality, approximation, and distribution shift.
+\newblock \emph{Journal of Machine Learning Research (JMLR)}, 22\penalty0 (98):\penalty0 1--76, 2021.
+
+\bibitem[{\AA}str{\"o}m \& Furuta(2000){\AA}str{\"o}m and Furuta]{aastrom00pendulum-bangbang}
+{\AA}str{\"o}m, K.~J. and Furuta, K.
+\newblock Swinging up a pendulum by energy control.
+\newblock \emph{Automatica}, 36\penalty0 (2):\penalty0 287--295, 2000.
+
+\bibitem[Bastani et~al.(2021)Bastani, Drakopoulos, Gupta, Vlachogiannis, Hadjichristodoulou, Lagiou, Magiorkinis, Paraskevis, and Tsiodras]{bastani21nature-rlmedicine}
+Bastani, H., Drakopoulos, K., Gupta, V., Vlachogiannis, I., Hadjichristodoulou, C., Lagiou, P., Magiorkinis, G., Paraskevis, D., and Tsiodras, S.
+\newblock Efficient and targeted covid-19 border testing via reinforcement learning.
+\newblock \emph{Nature}, 599\penalty0 (7883):\penalty0 108--113, 2021.
+
+\bibitem[Baxter \& Bartlett(2001)Baxter and Bartlett]{baxter01jair-gpomdp}
+Baxter, J. and Bartlett, P.~L.
+\newblock Infinite-horizon policy-gradient estimation.
+\newblock \emph{Journal of Artificial Intelligence Research}, 15:\penalty0 319--350, 2001.
+
+\bibitem[Bottou et~al.(2018)Bottou, Curtis, and Nocedal]{bottou18siamreview-sgd}
+Bottou, L., Curtis, F.~E., and Nocedal, J.
+\newblock Optimization methods for large-scale machine learning.
+\newblock \emph{SIAM review}, 60\penalty0 (2):\penalty0 223--311, 2018.
+
+\bibitem[Brockman et~al.(2016)Brockman, Cheung, Pettersson, Schneider, Schulman, Tang, and Zaremba]{brockman16arxiv-gym}
+Brockman, G., Cheung, V., Pettersson, L., Schneider, J., Schulman, J., Tang, J., and Zaremba, W.
+\newblock Openai gym.
+\newblock \emph{arXiv preprint arXiv:1606.01540}, 2016.
+
+\bibitem[Cevher \& V{\~u}(2019)Cevher and V{\~u}]{cevher19optletters-sgdlinearconvergence}
+Cevher, V. and V{\~u}, B.~C.
+\newblock On the linear convergence of the stochastic gradient method with constant step-size.
+\newblock \emph{Optimization Letters}, 13\penalty0 (5):\penalty0 1177--1187, 2019.
+
+\bibitem[Chung et~al.(2021)Chung, Thomas, Machado, and Le~Roux]{chung21icml-committalbaselines}
+Chung, W., Thomas, V., Machado, M.~C., and Le~Roux, N.
+\newblock Beyond variance reduction: Understanding the true impact of baselines on policy optimization.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, pp.\  1999--2009. PMLR, 2021.
+
+\bibitem[Dohare et~al.(2023)Dohare, Lan, and Mahmood]{dohare23ewrl-policycollapse}
+Dohare, S., Lan, Q., and Mahmood, A.~R.
+\newblock Overcoming policy collapse in deep reinforcement learning.
+\newblock In \emph{Sixteenth European Workshop on Reinforcement Learning}, 2023.
+
+\bibitem[Fazel et~al.(2018)Fazel, Ge, Kakade, and Mesbahi]{fazel18icml-lqrglobal}
+Fazel, M., Ge, R., Kakade, S., and Mesbahi, M.
+\newblock Global convergence of policy gradient methods for the linear quadratic regulator.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, pp.\  1467--1476, 2018.
+
+\bibitem[Furieri et~al.(2020)Furieri, Zheng, and Kamgarpour]{furieri20l4dc-finitelqr}
+Furieri, L., Zheng, Y., and Kamgarpour, M.
+\newblock Learning the globally optimal distributed lq regulator.
+\newblock In \emph{Annual Learning for Dynamics and Control Conference (L4DC)}, pp.\  287--297. PMLR, 2020.
+
+\bibitem[Greensmith et~al.(2004)Greensmith, Bartlett, and Baxter]{greensmith04jmlr-variancereduction}
+Greensmith, E., Bartlett, P.~L., and Baxter, J.
+\newblock Variance reduction techniques for gradient estimates in reinforcement learning.
+\newblock \emph{Journal of Machine Learning Research (JMLR)}, 5:\penalty0 1471--1530, 2004.
+
+\bibitem[Haarnoja et~al.(2018)Haarnoja, Zhou, Abbeel, and Levine]{haarnoja18icml-sac}
+Haarnoja, T., Zhou, A., Abbeel, P., and Levine, S.
+\newblock Soft actor-critic: Off-policy maximum entropy deep reinforcement learning with a stochastic actor.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, pp.\  1861--1870, 2018.
+
+\bibitem[Han \& Yang(2024)Han and Yang]{han24l4dc-pendulum}
+Han, H. and Yang, H.
+\newblock On the nonsmooth geometry and neural approximation of the optimal value function of infinite-horizon pendulum swing-up.
+\newblock In \emph{Annual Learning for Dynamics and Control Conference (L4DC)}, pp.\  654--666. PMLR, 2024.
+
+\bibitem[Henderson et~al.(2018)Henderson, Islam, Bachman, Pineau, Precup, and Meger]{henderson18aaai-rlimplementation}
+Henderson, P., Islam, R., Bachman, P., Pineau, J., Precup, D., and Meger, D.
+\newblock Deep reinforcement learning that matters.
+\newblock In \emph{Proceedings of the AAAI conference on artificial intelligence}, volume~32, 2018.
+
+\bibitem[Ilyas et~al.(2018)Ilyas, Engstrom, Santurkar, Tsipras, Janoos, Rudolph, and Madry]{ilyas18arxiv-policycollapse}
+Ilyas, A., Engstrom, L., Santurkar, S., Tsipras, D., Janoos, F., Rudolph, L., and Madry, A.
+\newblock A closer look at deep policy gradients.
+\newblock \emph{arXiv preprint arXiv:1811.02553}, 2018.
+
+\bibitem[Julier \& Uhlmann(2004)Julier and Uhlmann]{julier04proceedings-nonlinearestimation}
+Julier, S.~J. and Uhlmann, J.~K.
+\newblock Unscented filtering and nonlinear estimation.
+\newblock \emph{Proceedings of the IEEE}, 92\penalty0 (3):\penalty0 401--422, 2004.
+
+\bibitem[Kakade(2001)]{kakade01neurips-npg}
+Kakade, S.~M.
+\newblock A natural policy gradient.
+\newblock In \emph{Conference on Neural Information Processing Systems (NeurIPS)}, 2001.
+
+\bibitem[Kingma \& Ba(2014)Kingma and Ba]{kingma14arxiv-adam}
+Kingma, D.~P. and Ba, J.
+\newblock Adam: A method for stochastic optimization.
+\newblock \emph{arXiv preprint arXiv:1412.6980}, 2014.
+
+\bibitem[Komorowski et~al.(2018)Komorowski, Celi, Badawi, Gordon, and Faisal]{komorowski18nature-rlmedicine}
+Komorowski, M., Celi, L.~A., Badawi, O., Gordon, A.~C., and Faisal, A.~A.
+\newblock The artificial intelligence clinician learns optimal treatment strategies for sepsis in intensive care.
+\newblock \emph{Nature medicine}, 24\penalty0 (11):\penalty0 1716--1720, 2018.
+
+\bibitem[Kumar et~al.(2023)Kumar, Marklund, and Van~Roy]{kumar23arxiv-maintaining}
+Kumar, S., Marklund, H., and Van~Roy, B.
+\newblock Maintaining plasticity in continual learning via regenerative regularization.
+\newblock \emph{arXiv preprint arXiv:2308.11958}, 2023.
+
+\bibitem[Lillicrap(2015)]{lillicrap15arxiv-ddpg}
+Lillicrap, T.~P.
+\newblock Continuous control with deep reinforcement learning.
+\newblock \emph{arXiv preprint arXiv:1509.02971}, 2015.
+
+\bibitem[Magnus et~al.(1978)]{magnus78report-gaussianmoments}
+Magnus, J.~R. et~al.
+\newblock \emph{The moments of products of quadratic forms in normal variables}.
+\newblock Univ., Instituut voor Actuariaat en Econometrie, 1978.
+
+\bibitem[Malik et~al.(2020)Malik, Pananjady, Bhatia, Khamaru, Bartlett, and Wainwright]{malik20jmlr-stochasticlqroptimization}
+Malik, D., Pananjady, A., Bhatia, K., Khamaru, K., Bartlett, P.~L., and Wainwright, M.~J.
+\newblock Derivative-free methods for policy optimization: Guarantees for linear quadratic systems.
+\newblock \emph{Journal of Machine Learning Research (JMLR)}, 21\penalty0 (21):\penalty0 1--51, 2020.
+
+\bibitem[Mei et~al.(2020)Mei, Xiao, Szepesvari, and Schuurmans]{mei20icml-globalconvergence}
+Mei, J., Xiao, C., Szepesvari, C., and Schuurmans, D.
+\newblock On the global convergence rates of softmax policy gradient methods.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, pp.\  6820--6829. PMLR, 2020.
+
+\bibitem[Mei et~al.(2022)Mei, Chung, Thomas, Dai, Szepesvari, and Schuurmans]{mei22neurips-committalbaselines}
+Mei, J., Chung, W., Thomas, V., Dai, B., Szepesvari, C., and Schuurmans, D.
+\newblock The role of baselines in policy gradient optimization.
+\newblock \emph{Conference on Neural Information Processing Systems (NeurIPS)}, 35:\penalty0 17818--17830, 2022.
+
+\bibitem[Mnih et~al.(2015)Mnih, Kavukcuoglu, Silver, Rusu, Veness, Bellemare, Graves, Riedmiller, Fidjeland, Ostrovski, et~al.]{mnih15nature-dqnonatari}
+Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A.~A., Veness, J., Bellemare, M.~G., Graves, A., Riedmiller, M., Fidjeland, A.~K., Ostrovski, G., et~al.
+\newblock Human-level control through deep reinforcement learning.
+\newblock \emph{Nature}, 518\penalty0 (7540):\penalty0 529--533, 2015.
+
+\bibitem[Mohammadi et~al.(2021)Mohammadi, Zare, Soltanolkotabi, and Jovanovi{\'c}]{mohammadi21tac-stochasticlqroptimization}
+Mohammadi, H., Zare, A., Soltanolkotabi, M., and Jovanovi{\'c}, M.~R.
+\newblock Convergence and sample complexity of gradient methods for the model-free linear--quadratic regulator problem.
+\newblock \emph{IEEE Transactions on Automatic Control}, 67\penalty0 (5):\penalty0 2435--2450, 2021.
+
+\bibitem[Muppidi et~al.(2024)Muppidi, Zhang, and Yang]{muppidi24neurips-trac}
+Muppidi, A., Zhang, Z., and Yang, H.
+\newblock Fast trac: A parameter-free optimizer for lifelong reinforcement learning.
+\newblock In \emph{Conference on Neural Information Processing Systems (NeurIPS)}, volume~37, pp.\  51169--51195, 2024.
+
+\bibitem[OpenAI(2020)]{andrychowicz20ijrr-learning}
+OpenAI.
+\newblock Learning dexterous in-hand manipulation.
+\newblock \emph{International Journal of Robotics Research (IJRR)}, 39\penalty0 (1):\penalty0 3--20, 2020.
+
+\bibitem[OpenAI et~al.(2024)OpenAI, Achiam, Adler, Agarwal, Ahmad, Akkaya, Aleman, Almeida, Altenschmidt, Altman, Anadkat, Avila, Babuschkin, Balaji, Balcom, Baltescu, Bao, Bavarian, Belgum, Bello, Berdine, Bernadett-Shapiro, Berner, Bogdonoff, Boiko, Boyd, Brakman, Brockman, Brooks, Brundage, Button, Cai, Campbell, Cann, Carey, Carlson, Carmichael, Chan, Chang, Chantzis, Chen, Chen, Chen, Chen, Chen, Chess, Cho, Chu, Chung, Cummings, Currier, Dai, Decareaux, Degry, Deutsch, Deville, Dhar, Dohan, Dowling, Dunning, Ecoffet, Eleti, Eloundou, Farhi, Fedus, Felix, Fishman, Forte, Fulford, Gao, Georges, Gibson, Goel, Gogineni, Goh, Gontijo-Lopes, Gordon, Grafstein, Gray, Greene, Gross, Gu, Guo, Hallacy, Han, Harris, He, Heaton, Heidecke, Hesse, Hickey, Hickey, Hoeschele, Houghton, Hsu, Hu, Hu, Huizinga, Jain, Jain, Jang, Jiang, Jiang, Jin, Jin, Jomoto, Jonn, Jun, Kaftan, Łukasz Kaiser, Kamali, Kanitscheider, Keskar, Khan, Kilpatrick, Kim, Kim, Kim, Kirchner, Kiros, Knight, Kokotajlo, Łukasz Kondraciuk, Kondrich, Konstantinidis, Kosic, Krueger, Kuo, Lampe, Lan, Lee, Leike, Leung, Levy, Li, Lim, Lin, Lin, Litwin, Lopez, Lowe, Lue, Makanju, Malfacini, Manning, Markov, Markovski, Martin, Mayer, Mayne, McGrew, McKinney, McLeavey, McMillan, McNeil, Medina, Mehta, Menick, Metz, Mishchenko, Mishkin, Monaco, Morikawa, Mossing, Mu, Murati, Murk, Mély, Nair, Nakano, Nayak, Neelakantan, Ngo, Noh, Ouyang, O'Keefe, Pachocki, Paino, Palermo, Pantuliano, Parascandolo, Parish, Parparita, Passos, Pavlov, Peng, Perelman, de~Avila Belbute~Peres, Petrov, de~Oliveira~Pinto, Michael, Pokorny, Pokrass, Pong, Powell, Power, Power, Proehl, Puri, Radford, Rae, Ramesh, Raymond, Real, Rimbach, Ross, Rotsted, Roussez, Ryder, Saltarelli, Sanders, Santurkar, Sastry, Schmidt, Schnurr, Schulman, Selsam, Sheppard, Sherbakov, Shieh, Shoker, Shyam, Sidor, Sigler, Simens, Sitkin, Slama, Sohl, Sokolowsky, Song, Staudacher, Such, Summers, Sutskever, Tang, Tezak, Thompson, Tillet, Tootoonchian, Tseng, Tuggle, Turley, Tworek, Uribe, Vallone, Vijayvergiya, Voss, Wainwright, Wang, Wang, Wang, Ward, Wei, Weinmann, Welihinda, Welinder, Weng, Weng, Wiethoff, Willner, Winter, Wolrich, Wong, Workman, Wu, Wu, Wu, Xiao, Xu, Yoo, Yu, Yuan, Zaremba, Zellers, Zhang, Zhang, Zhao, Zheng, Zhuang, Zhuk, and Zoph]{openai24arxiv-gpt4technicalreport}
+OpenAI, Achiam, J., Adler, S., Agarwal, S., Ahmad, L., Akkaya, I., Aleman, F.~L., Almeida, D., Altenschmidt, J., Altman, S., Anadkat, S., Avila, R., Babuschkin, I., Balaji, S., Balcom, V., Baltescu, P., Bao, H., Bavarian, M., Belgum, J., Bello, I., Berdine, J., Bernadett-Shapiro, G., Berner, C., Bogdonoff, L., Boiko, O., Boyd, M., Brakman, A.-L., Brockman, G., Brooks, T., Brundage, M., Button, K., Cai, T., Campbell, R., Cann, A., Carey, B., Carlson, C., Carmichael, R., Chan, B., Chang, C., Chantzis, F., Chen, D., Chen, S., Chen, R., Chen, J., Chen, M., Chess, B., Cho, C., Chu, C., Chung, H.~W., Cummings, D., Currier, J., Dai, Y., Decareaux, C., Degry, T., Deutsch, N., Deville, D., Dhar, A., Dohan, D., Dowling, S., Dunning, S., Ecoffet, A., Eleti, A., Eloundou, T., Farhi, D., Fedus, L., Felix, N., Fishman, S.~P., Forte, J., Fulford, I., Gao, L., Georges, E., Gibson, C., Goel, V., Gogineni, T., Goh, G., Gontijo-Lopes, R., Gordon, J., Grafstein, M., Gray, S., Greene, R., Gross, J., Gu, S.~S., Guo, Y., Hallacy, C., Han, J., Harris, J., He, Y., Heaton, M., Heidecke, J., Hesse, C., Hickey, A., Hickey, W., Hoeschele, P., Houghton, B., Hsu, K., Hu, S., Hu, X., Huizinga, J., Jain, S., Jain, S., Jang, J., Jiang, A., Jiang, R., Jin, H., Jin, D., Jomoto, S., Jonn, B., Jun, H., Kaftan, T., Łukasz Kaiser, Kamali, A., Kanitscheider, I., Keskar, N.~S., Khan, T., Kilpatrick, L., Kim, J.~W., Kim, C., Kim, Y., Kirchner, J.~H., Kiros, J., Knight, M., Kokotajlo, D., Łukasz Kondraciuk, Kondrich, A., Konstantinidis, A., Kosic, K., Krueger, G., Kuo, V., Lampe, M., Lan, I., Lee, T., Leike, J., Leung, J., Levy, D., Li, C.~M., Lim, R., Lin, M., Lin, S., Litwin, M., Lopez, T., Lowe, R., Lue, P., Makanju, A., Malfacini, K., Manning, S., Markov, T., Markovski, Y., Martin, B., Mayer, K., Mayne, A., McGrew, B., McKinney, S.~M., McLeavey, C., McMillan, P., McNeil, J., Medina, D., Mehta, A., Menick, J., Metz, L., Mishchenko, A., Mishkin, P., Monaco, V., Morikawa, E., Mossing, D., Mu, T., Murati, M., Murk, O., Mély, D., Nair, A., Nakano, R., Nayak, R., Neelakantan, A., Ngo, R., Noh, H., Ouyang, L., O'Keefe, C., Pachocki, J., Paino, A., Palermo, J., Pantuliano, A., Parascandolo, G., Parish, J., Parparita, E., Passos, A., Pavlov, M., Peng, A., Perelman, A., de~Avila Belbute~Peres, F., Petrov, M., de~Oliveira~Pinto, H.~P., Michael, Pokorny, Pokrass, M., Pong, V.~H., Powell, T., Power, A., Power, B., Proehl, E., Puri, R., Radford, A., Rae, J., Ramesh, A., Raymond, C., Real, F., Rimbach, K., Ross, C., Rotsted, B., Roussez, H., Ryder, N., Saltarelli, M., Sanders, T., Santurkar, S., Sastry, G., Schmidt, H., Schnurr, D., Schulman, J., Selsam, D., Sheppard, K., Sherbakov, T., Shieh, J., Shoker, S., Shyam, P., Sidor, S., Sigler, E., Simens, M., Sitkin, J., Slama, K., Sohl, I., Sokolowsky, B., Song, Y., Staudacher, N., Such, F.~P., Summers, N., Sutskever, I., Tang, J., Tezak, N., Thompson, M.~B., Tillet, P., Tootoonchian, A., Tseng, E., Tuggle, P., Turley, N., Tworek, J., Uribe, J. F.~C., Vallone, A., Vijayvergiya, A., Voss, C., Wainwright, C., Wang, J.~J., Wang, A., Wang, B., Ward, J., Wei, J., Weinmann, C., Welihinda, A., Welinder, P., Weng, J., Weng, L., Wiethoff, M., Willner, D., Winter, C., Wolrich, S., Wong, H., Workman, L., Wu, S., Wu, J., Wu, M., Xiao, K., Xu, T., Yoo, S., Yu, K., Yuan, Q., Zaremba, W., Zellers, R., Zhang, C., Zhang, M., Zhao, S., Zheng, T., Zhuang, J., Zhuk, W., and Zoph, B.
+\newblock Gpt-4 technical report, 2024.
+\newblock URL \url{https://arxiv.org/abs/2303.08774}.
+
+\bibitem[Ouyang et~al.(2022)Ouyang, Wu, Jiang, Almeida, Wainwright, Mishkin, Zhang, Agarwal, Slama, Ray, et~al.]{ouyang22neurips-rlhf}
+Ouyang, L., Wu, J., Jiang, X., Almeida, D., Wainwright, C., Mishkin, P., Zhang, C., Agarwal, S., Slama, K., Ray, A., et~al.
+\newblock Training language models to follow instructions with human feedback.
+\newblock \emph{Conference on Neural Information Processing Systems (NeurIPS)}, 35:\penalty0 27730--27744, 2022.
+
+\bibitem[Papini et~al.(2022)Papini, Pirotta, and Restelli]{papini22ml-reinforcevariance}
+Papini, M., Pirotta, M., and Restelli, M.
+\newblock Smoothing policies and safe policy gradients.
+\newblock \emph{Machine Learning}, 111\penalty0 (11):\penalty0 4081--4137, 2022.
+
+\bibitem[Preiss et~al.(2019)Preiss, Arnold, Wei, and Kloft]{preiss19arxiv-lqgvariance}
+Preiss, J.~A., Arnold, S.~M., Wei, C.-Y., and Kloft, M.
+\newblock Analyzing the variance of policy gradient estimators for the linear-quadratic regulator.
+\newblock \emph{arXiv preprint arXiv:1910.01249}, 2019.
+
+\bibitem[Schulman et~al.(2015{\natexlab{a}})Schulman, Levine, Abbeel, Jordan, and Moritz]{schulman15icml-trpo}
+Schulman, J., Levine, S., Abbeel, P., Jordan, M., and Moritz, P.
+\newblock Trust region policy optimization.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, pp.\  1889--1897. PMLR, 2015{\natexlab{a}}.
+
+\bibitem[Schulman et~al.(2015{\natexlab{b}})Schulman, Moritz, Levine, Jordan, and Abbeel]{schulman15iclr-gae}
+Schulman, J., Moritz, P., Levine, S., Jordan, M., and Abbeel, P.
+\newblock High-dimensional continuous control using generalized advantage estimation.
+\newblock \emph{International Conference on Learning Representations (ICLR)}, 2015{\natexlab{b}}.
+
+\bibitem[Schulman et~al.(2017)Schulman, Wolski, Dhariwal, Radford, and Klimov]{schulman17arxiv-ppo}
+Schulman, J., Wolski, F., Dhariwal, P., Radford, A., and Klimov, O.
+\newblock Proximal policy optimization algorithms.
+\newblock \emph{arXiv preprint arXiv:1707.06347}, 2017.
+
+\bibitem[Silver et~al.(2016)Silver, Huang, Maddison, Guez, Sifre, Van Den~Driessche, Schrittwieser, Antonoglou, Panneershelvam, Lanctot, et~al.]{silver16nature-alphago}
+Silver, D., Huang, A., Maddison, C.~J., Guez, A., Sifre, L., Van Den~Driessche, G., Schrittwieser, J., Antonoglou, I., Panneershelvam, V., Lanctot, M., et~al.
+\newblock Mastering the game of go with deep neural networks and tree search.
+\newblock \emph{Nature}, 529\penalty0 (7587):\penalty0 484--489, 2016.
+
+\bibitem[Silver et~al.(2017)Silver, Schrittwieser, Simonyan, Antonoglou, Huang, Guez, Hubert, Baker, Lai, Bolton, et~al.]{silver17nature-alphazero}
+Silver, D., Schrittwieser, J., Simonyan, K., Antonoglou, I., Huang, A., Guez, A., Hubert, T., Baker, L., Lai, M., Bolton, A., et~al.
+\newblock Mastering the game of go without human knowledge.
+\newblock \emph{Nature}, 550\penalty0 (7676):\penalty0 354--359, 2017.
+
+\bibitem[Sokar et~al.(2023)Sokar, Agarwal, Castro, and Evci]{sokar23icml-dormant}
+Sokar, G., Agarwal, R., Castro, P.~S., and Evci, U.
+\newblock The dormant neuron phenomenon in deep reinforcement learning.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, pp.\  32145--32168. PMLR, 2023.
+
+\bibitem[Song et~al.(2023)Song, Romero, M{\"u}ller, Koltun, and Scaramuzza]{song23sciencerobotics-autonomousracing}
+Song, Y., Romero, A., M{\"u}ller, M., Koltun, V., and Scaramuzza, D.
+\newblock Reaching the limit in autonomous racing: Optimal control versus reinforcement learning.
+\newblock \emph{Science Robotics}, 8\penalty0 (82), 2023.
+
+\bibitem[Sutton et~al.(1998)Sutton, Barto, et~al.]{sutton98book-rlbook}
+Sutton, R.~S., Barto, A.~G., et~al.
+\newblock \emph{Reinforcement learning: An introduction}.
+\newblock MIT press Cambridge, 1998.
+
+\bibitem[Sutton et~al.(1999)Sutton, McAllester, Singh, and Mansour]{sutton99neurips-policygradient}
+Sutton, R.~S., McAllester, D., Singh, S., and Mansour, Y.
+\newblock Policy gradient methods for reinforcement learning with function approximation.
+\newblock \emph{Conference on Neural Information Processing Systems (NeurIPS)}, 12, 1999.
+
+\bibitem[Tang et~al.(2023)Tang, Zheng, and Li]{tang23mp-lqglandscape}
+Tang, Y., Zheng, Y., and Li, N.
+\newblock Analysis of the optimization landscape of linear quadratic gaussian (lqg) control.
+\newblock \emph{Mathematical Programming}, 202\penalty0 (1):\penalty0 399--444, 2023.
+
+\bibitem[Williams(1992)]{williams92ml-reinforce}
+Williams, R.~J.
+\newblock Simple statistical gradient-following algorithms for connectionist reinforcement learning.
+\newblock \emph{Machine Learning}, 8\penalty0 (3):\penalty0 229--256, 1992.
+
+\bibitem[Yang et~al.(2019)Yang, Chen, Hong, and Wang]{yang19neurips-actorcriticlqr}
+Yang, Z., Chen, Y., Hong, M., and Wang, Z.
+\newblock Provably global convergence of actor-critic: A case for linear quadratic regulator with ergodic cost.
+\newblock \emph{Conference on Neural Information Processing Systems (NeurIPS)}, 32, 2019.
+
+\bibitem[Zhao et~al.(2011)Zhao, Hachiya, Niu, and Sugiyama]{zhao11neurips-pgvariance}
+Zhao, T., Hachiya, H., Niu, G., and Sugiyama, M.
+\newblock Analysis and improvement of policy gradient estimation.
+\newblock \emph{Advances in Neural Information Processing Systems}, 24, 2011.
+
+\end{thebibliography}

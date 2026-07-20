@@ -1,0 +1,114 @@
+%!TEX root = ../main.tex
+\section{Proof of Lemma~\ref{lem:lqg-policy-score} }
+\label{sec:app-proof-lqg-policy-score}
+
+\begin{proof}
+The Gaussian density is
+\[
+\pi(a\mid s)
+= (2\pi)^{-m/2}\,\det(\Sigma)^{-1/2}\,
+\exp\!\left(-\frac12 (a-Ks)^\top \Sigma^{-1}(a-Ks)\right).
+\]
+Let $\varepsilon := a-Ks$. Taking logarithms yields
+\[
+\log \pi(a\mid s)
+= -\frac12 \varepsilon^\top \Sigma^{-1}\varepsilon
+-\frac12 \log\det(\Sigma) + c,
+\]
+where $c$ is a constant independent of $K,\ell$.
+
+\textbf{Gradient \wrt $K$.}
+Using differentials, $d\varepsilon = -dK s$, hence
+\[
+d\big(\varepsilon^\top \Sigma^{-1}\varepsilon\big)
+= 2\,\varepsilon^\top \Sigma^{-1} d\varepsilon
+= -2\,\varepsilon^\top \Sigma^{-1} (dK)s.
+\]
+Rewrite the scalar as a trace:
+\[
+-2\,\varepsilon^\top \Sigma^{-1} (dK)s
+= -2\,\mathrm{tr}\!\left( s\,\varepsilon^\top \Sigma^{-1} \, dK \right).
+\]
+Therefore,
+\[
+d\log \pi(a\mid s)
+= -\frac12\, d(\varepsilon^\top \Sigma^{-1}\varepsilon)
+= \mathrm{tr}\!\left( s\,\varepsilon^\top \Sigma^{-1}\, dK \right),
+\]
+which implies (by the identity $d f = \mathrm{tr}((\nabla_K f)^\top dK)$)
+\[
+\nabla_K \log \pi(a\mid s)
+= \Sigma^{-1}\varepsilon\, s^\top
+= \Sigma^{-1}(a-Ks)\,s^\top.
+\]
+
+\textbf{Gradient \wrt $\ell=\log\sigma$.}
+Since $\Sigma=\mathrm{diag}(\sigma)^2$ with $\sigma_i = e^{\ell_i}$, we have
+$\Sigma_{ii} = \sigma_i^2 = e^{2\ell_i}$ and $(\Sigma^{-1})_{ii} = \sigma_i^{-2}$.
+The log-density can be written componentwise as
+\[
+\log \pi(a\mid s)
+= -\frac12\sum_{i=1}^m\left(\frac{\varepsilon_i^2}{\sigma_i^2} + \log \sigma_i^2\right) + c
+= -\frac12\sum_{i=1}^m\left(\frac{\varepsilon_i^2}{\sigma_i^2} + 2\ell_i\right) + c.
+\]
+Differentiate each coordinate:
+\[
+\frac{\partial}{\partial \ell_i}\log \pi(a\mid s)
+= -\frac12\left(\frac{\partial}{\partial \ell_i}\frac{\varepsilon_i^2}{\sigma_i^2} + 2\right).
+\]
+Because $\sigma_i^2=e^{2\ell_i}$, we have $\sigma_i^{-2}=e^{-2\ell_i}$ and
+$\frac{\partial}{\partial \ell_i}\sigma_i^{-2} = -2\sigma_i^{-2}$, hence
+\[
+\frac{\partial}{\partial \ell_i}\frac{\varepsilon_i^2}{\sigma_i^2}
+= \varepsilon_i^2 \frac{\partial}{\partial \ell_i}\sigma_i^{-2}
+= -2\frac{\varepsilon_i^2}{\sigma_i^2}.
+\]
+Substituting gives
+\[
+\frac{\partial}{\partial \ell_i}\log \pi(a\mid s)
+= -\frac12\left(-2\frac{\varepsilon_i^2}{\sigma_i^2} + 2\right)
+= \frac{\varepsilon_i^2}{\sigma_i^2} - 1.
+\]
+Stacking the coordinates yields
+\[
+\nabla_\ell \log \pi(a\mid s)
+= \Sigma^{-1}(\varepsilon\odot \varepsilon) - \mathbf{1}.
+\]
+
+Finally, since $a\mid s \sim \mathcal{N}(Ks,\Sigma)$, the centered variable
+$\varepsilon = a-Ks$ satisfies $\varepsilon \sim \mathcal{N}(0,\Sigma)$.
+\end{proof}
+
+
+\section{Proof of Lemma~\ref{lem:IS_shorthand} }
+\label{sec:app-proof-IS-shorthand}
+
+\begin{proof}
+    
+The expansions in \eqref{eq:IS_123} follow from Isserlis (Wick's) theorem for centered Gaussians applied to
+quadratic forms. This is also proved in \cite{magnus78report-gaussianmoments}.
+
+To prove \eqref{eq:IS_positive}, for $A\succeq 0$, we have $x^\top A x = 0$ if and only if $x \in \ker(A)$.
+Since each $A_i \succeq 0$ and $A_i\neq 0$, its kernel $\ker(A_i)$ is a proper linear
+subspace of $\mathbb{R}^n$. Because $\Omega \succ 0$, the Gaussian $x\sim\mathcal{N}(0,\Omega)$ has a density that is
+strictly positive on all of $\mathbb{R}^n$. In particular, any proper linear subspace has
+Lebesgue measure zero, hence
+\[
+\mathbb{P}\big(x \in \ker(A_i)\big) = 0 \qquad \text{for each } i.
+\]
+Since a finite union of measure-zero sets has measure zero, we have
+\[
+\mathbb{P}\!\left(x \in \bigcup_{i=1}^k \ker(A_i)\right) = 0,
+\quad\text{so}\quad
+\mathbb{P}\!\left(x \notin \bigcup_{i=1}^k \ker(A_i)\right) = 1.
+\]
+Therefore, with probability $1$ we have $x \notin \ker(A_i)$ for every $i$, which implies
+$x^\top A_i x > 0$ for every $i$, and hence
+\[
+\prod_{i=1}^k (x^\top A_i x) > 0 \qquad \text{almost surely.}
+\]
+Since the integrand is nonnegative and strictly positive almost surely, the expectation must be strictly positive:
+\[
+\mathbb{E}\!\left[\prod_{i=1}^k (x^\top A_i x)\right] > 0.
+\]
+\end{proof}

@@ -1,0 +1,485 @@
+%!TEX root = ../main.tex
+\section{Proof of Theorem \ref{thm:lqr-variance-T-bound}}
+\label{sec:app-proof-lqr-variance-T-bound}
+
+\begin{proof}
+   Recall the policy gradient estimators
+\[
+\widehat G_K
+=\sum_{t=0}^{T-1}\Sigma^{-1}\varepsilon_t s_t^\top\,R(\tau),
+\qquad
+\widehat G_{\ell}
+=\sum_{t=0}^{T-1}\Big(\Sigma^{-1}(\varepsilon_t\odot \varepsilon_t)-\mathbf 1\Big)\,R(\tau),
+\]
+and the stacked noise $\bar\varepsilon:=(\varepsilon_0^\top,\dots,\varepsilon_{T-1}^\top)^\top\sim\mathcal N(0,\overline\Sigma)$
+with $\overline\Sigma:=I_T\otimes\Sigma$.
+   
+   Using Cauchy’s inequality on each Frobenius entry, let $\eta_t = \Sigma^{-1}\varepsilon_t$.
+   \begin{align*}
+   \|\widehat G_K\|_{\mathrm{F}}^2
+   &=\Big\|\sum_{t=0}^{T-1}\Sigma^{-1}\varepsilon_t s_t^\top\Big\|_{\mathrm{F}}^2\,R(\tau)^2
+   = \sum_{i,j}\Big(\sum_{t=0}^{T-1} \eta_{t,i}s_{t,j}\Big)^2 R(\tau)^2 \\
+   &\le \sum_{i,j}
+      \Big(\sum_{t=0}^{T-1} \eta_{t,i}^2\Big)
+      \Big(\sum_{t=0}^{T-1} s_{t,j}^2\Big) R(\tau)^2
+   = \Big(\sum_{t=0}^{T-1} \|\eta_t\|_2^2\Big)
+      \Big(\sum_{t=0}^{T-1} \|s_t\|_2^2\Big) R(\tau)^2.
+   \end{align*}
+   Using stacked $\bar\varepsilon$ and $\bar s$ we obtain
+   \begin{equation}
+   \label{eq:second-moment-global}
+   \VarF(\widehat G_K) \le \mathbb E\big[\|\widehat G_K\|_{\mathrm{F}}^2\big]
+   \;\le\;
+   \mathbb E\big[\|\overline\Sigma^{-1}\bar\varepsilon\|_2^2\;\|\bar s\|_2^2\;R(\tau)^2\big].
+   \end{equation}
+
+   By AM-GM inequality, we have the decomposition
+   \begin{equation}
+      \VarF(\widehat G_K)
+      \;\le\;2\,\underbrace{\mathbb E\!\big[\|\overline\Sigma^{-1}\bar\varepsilon\|_2^2\,
+                                 \|\mathcal F_S s_0\|_2^2\,R(\tau)^{2}\big]}_{(\star)}
+      \;+\;2\,\underbrace{\mathbb E\!\big[\|\overline\Sigma^{-1}\bar\varepsilon\|_2^2\,
+                                 \|\mathcal F_E\bar\varepsilon\|_2^2\,R(\tau)^{2}\big]}_{(\dagger)} .
+    \end{equation}
+
+   For the $\ell$ part, define the per-step score term
+\[
+g_t \;:=\;\Sigma^{-1}(\varepsilon_t\odot \varepsilon_t)-\mathbf 1\in\R^m,
+\qquad
+\widehat G_\ell \;=\;\sum_{t=0}^{T-1} g_t\,R(\tau).
+\]
+By Cauchy--Schwarz (or $\|\sum_{t=0}^{T-1}v_t\|_2^2\le T\sum_{t=0}^{T-1}\|v_t\|_2^2$),
+\begin{equation}\label{eq:ell-second-moment-global}
+\mathbb E\big[\|\widehat G_\ell\|_2^2\big]
+\;\le\;
+T\,\mathbb E\big[\sum_{t=0}^{T-1}\|g_t\|_2^2\,R(\tau)^2\big].
+\end{equation}
+
+We next bound $\sum_{t=0}^{T-1}\|g_t\|_2^2$ by a polynomial in $\bar\varepsilon$.
+Since $\Sigma$ is diagonal, write $\varepsilon_t=\Sigma^{1/2}\xi_t$ with $\xi_t\sim\mathcal N(0,I_m)$ i.i.d.,
+so that
+\[
+g_t=\Sigma^{-1}(\varepsilon_t\odot \varepsilon_t)-\mathbf 1
+= (\xi_t\odot\xi_t)-\mathbf 1,
+\qquad
+\|g_t\|_2^2=\sum_{i=1}^m(\xi_{t,i}^2-1)^2.
+\]
+Using $(a-1)^2\le 2a^2+2$ with $a=\xi_{t,i}^2\ge 0$ gives
+\[
+(\xi_{t,i}^2-1)^2 \le 2\xi_{t,i}^4+2
+\quad\Rightarrow\quad
+\|g_t\|_2^2 \le 2\sum_{i=1}^m \xi_{t,i}^4 + 2m
+\le 2\|\xi_t\|_2^4 + 2m.
+\]
+Summing over $t$ yields
+\[
+\sum_{t=0}^{T-1}\|g_t\|_2^2
+\le 2\sum_{t=0}^{T-1}\|\xi_t\|_2^4 + 2mT.
+\]
+Using $\|\xi_t\|_2^2\ge 0$, we have 
+$
+\sum_{t=0}^{T-1}\|\xi_t\|_2^4
+\le \Big(\sum_{t=0}^{T-1}\|\xi_t\|_2^2\Big)^2
+=\|\bar\xi\|_2^4.
+$
+
+Finally, since $\bar\varepsilon=(I_T\otimes\Sigma^{1/2})\bar\xi$ and $\overline\Sigma=I_T\otimes\Sigma$,
+we have $\overline\Sigma^{-1/2}\bar\varepsilon=\bar\xi$, so $\|\bar\xi\|_2^4=\|\overline\Sigma^{-1/2}\bar\varepsilon\|_2^4$.
+Therefore,
+\[
+\sum_{t=0}^{T-1}\|g_t\|_2^2
+\le 2\|\overline\Sigma^{-1/2}\bar\varepsilon\|_2^4 + 2mT.
+\]
+Plugging into \eqref{eq:ell-second-moment-global} gives
+\[
+\mathbb E\big[\|\widehat G_\ell\|_2^2\big]
+\le
+T\,\mathbb E\!\Big[\big(2\|\overline\Sigma^{-1/2}\bar\varepsilon\|_2^4 + 2mT\big)\,R(\tau)^2\Big].
+\]
+
+
+Assume the standard multi-step quadratic decomposition of the return
+\[
+R(\tau)=-(x+2y+z),
+\qquad
+x:=s_0^\top \overline M_{ss}s_0,\quad
+y:=s_0^\top \overline M_{se}\bar\varepsilon,\quad
+z:=\bar\varepsilon^\top \overline M_{ee}\bar\varepsilon,
+\]
+\paragraph{Proof of $K$-part expansion.}
+Define
+\[
+S:=\mathcal F_S^\top\mathcal F_S,\qquad
+E:=\mathcal F_E^\top\mathcal F_E,\qquad
+\]
+
+
+\paragraph{Step 1: expand $(\star)$.}
+Since $\|\mathcal F_S s_0\|_2^2=s_0^\top S s_0$ and $R(\tau)=-(x+2y+z)$,
+\[
+(\star)
+=
+\E\!\left[(\bar\varepsilon^\top  \overline\Sigma^{-2}\bar\varepsilon)\,(s_0^\top S s_0)\,(x+2y+z)^2\right].
+\]
+Expanding $(x+2y+z)^2=x^2+z^2+2xz+4y^2+4xy+4yz$ and using independence
+$s_0\perp\!\!\!\perp\bar\varepsilon$ and odd-moment cancellation in $\bar\varepsilon$
+(which removes the $xy$ and $yz$ terms), we get
+\[
+(\star)=E^{(\star)}_{1,K}+E^{(\star)}_{2,K}+E^{(\star)}_{3,K}+E^{(\star)}_{4,K},
+\]
+with
+\begin{align*}
+E^{(\star)}_{1,K}
+&:= \E[\bar\varepsilon^\top  \overline\Sigma^{-2}\bar\varepsilon]\;\E\!\left[(s_0^\top S s_0)\,x^2\right],\\
+E^{(\star)}_{2,K}
+&:= \E[s_0^\top S s_0]\;\E\!\left[(\bar\varepsilon^\top  \overline\Sigma^{-2}\bar\varepsilon)\,z^2\right],\\
+E^{(\star)}_{3,K}
+&:= 2\,\E\!\left[(s_0^\top S s_0)\,x\right]\;\E\!\left[(\bar\varepsilon^\top  \overline\Sigma^{-2}\bar\varepsilon)\,z\right],\\
+E^{(\star)}_{4,K}
+&:= 4\,\E\!\left[(s_0^\top S s_0)\;
+\E\!\left[(\bar\varepsilon^\top  \overline\Sigma^{-2}\bar\varepsilon)\,y^2\,\middle|\,s_0\right]\right].
+\end{align*}
+
+Using Lemma~\ref{lem:IS_shorthand},
+\[
+\E[\bar\varepsilon^\top  \overline\Sigma^{-2}\bar\varepsilon]=\mathrm{IS}_{\overline\Sigma}( \overline\Sigma^{-2}),
+\qquad
+\E[s_0^\top S s_0]=\mathrm{IS}_{\Sigma_0}(S),
+\]
+\[
+\E\!\left[(s_0^\top S s_0)x\right]=\mathrm{IS}_{\Sigma_0}(S,\overline M_{ss}),
+\qquad
+\E\!\left[(s_0^\top S s_0)x^2\right]=\mathrm{IS}_{\Sigma_0}(S,\overline M_{ss},\overline M_{ss}),
+\]
+and since $z=\bar\varepsilon^\top \overline M_{ee}\bar\varepsilon$,
+\[
+\E\!\left[(\bar\varepsilon^\top  \overline\Sigma^{-2}\bar\varepsilon)z\right]
+=\mathrm{IS}_{\overline\Sigma}( \overline\Sigma^{-2},\overline M_{ee}),
+\qquad
+\E\!\left[(\bar\varepsilon^\top  \overline\Sigma^{-2}\bar\varepsilon)z^2\right]
+=\mathrm{IS}_{\overline\Sigma}( \overline\Sigma^{-2},\overline M_{ee},\overline M_{ee}).
+\]
+For $E^{(\star)}_{4,K}$, note $y=s_0^\top \overline M_{se}\bar\varepsilon$ implies
+\[
+y^2=\bar\varepsilon^\top X(s_0)\bar\varepsilon,
+\qquad
+X(s_0):=\overline M_{se}^\top s_0 s_0^\top \overline M_{se}.
+\]
+Conditioning on $s_0$ and applying Lemma~\ref{lem:IS_shorthand} with $k=2$,
+\[
+\E_{\bar\varepsilon}\!\left[(\bar\varepsilon^\top  \overline\Sigma^{-2}\bar\varepsilon)y^2\mid s_0\right]
+=\mathrm{IS}_{\overline\Sigma}\!\big( \overline\Sigma^{-2},X(s_0)\big).
+\]
+Define
+\[
+U:=\overline M_{se}\overline M_{se}^\top,
+\qquad
+V:=\overline M_{se}\overline\Sigma \overline M_{se}^\top.
+\]
+Then $\tr(X(s_0))=s_0^\top U s_0$ and $\tr(\overline\Sigma X(s_0))=s_0^\top V s_0$, and since
+$\overline\Sigma  \overline\Sigma^{-2}\overline\Sigma=I$, we obtain
+\[
+\mathrm{IS}_{\overline\Sigma}\!\big( \overline\Sigma^{-2},X(s_0)\big)
+=
+\mathrm{IS}_{\overline\Sigma}( \overline\Sigma^{-2})\,(s_0^\top V s_0)+2\,(s_0^\top U s_0).
+\]
+Therefore,
+\[
+E^{(\star)}_{4,K}
+=
+4\Big(
+\mathrm{IS}_{\overline\Sigma}( \overline\Sigma^{-2})\;\mathrm{IS}_{\Sigma_0}(S,V)
++
+2\,\mathrm{IS}_{\Sigma_0}(S,U)
+\Big).
+\]
+Altogether,
+\begin{equation}\label{eq:star-final}
+\begin{aligned}
+(\star)
+&=
+\mathrm{IS}_{\overline\Sigma}( \overline\Sigma^{-2})\;\mathrm{IS}_{\Sigma_0}(S,\overline M_{ss},\overline M_{ss})
++\mathrm{IS}_{\Sigma_0}(S)\;\mathrm{IS}_{\overline\Sigma}( \overline\Sigma^{-2},\overline M_{ee},\overline M_{ee})\\
+&\quad
++2\,\mathrm{IS}_{\Sigma_0}(S,\overline M_{ss})\;\mathrm{IS}_{\overline\Sigma}( \overline\Sigma^{-2},\overline M_{ee})
++4\Big(
+\mathrm{IS}_{\overline\Sigma}( \overline\Sigma^{-2})\;\mathrm{IS}_{\Sigma_0}(S,V)
++2\,\mathrm{IS}_{\Sigma_0}(S,U)
+\Big).
+\end{aligned}
+\end{equation}
+
+\paragraph{Step 2: expand $(\dagger)$.}
+Since $\|\mathcal F_E\bar\varepsilon\|_2^2=\bar\varepsilon^\top E\bar\varepsilon$,
+\[
+(\dagger)
+=
+\E\!\left[(\bar\varepsilon^\top  \overline\Sigma^{-2}\bar\varepsilon)\,(\bar\varepsilon^\top E\bar\varepsilon)\,(x+2y+z)^2\right].
+\]
+As before, odd-moment cancellation removes $xy$ and $yz$, yielding
+\[
+(\dagger)=E^{(\dagger)}_{1,K}+E^{(\dagger)}_{2,K}+E^{(\dagger)}_{3,K}+E^{(\dagger)}_{4,K},
+\]
+with
+\begin{align*}
+E^{(\dagger)}_{1,K}
+&:= \E\!\left[(\bar\varepsilon^\top  \overline\Sigma^{-2}\bar\varepsilon)(\bar\varepsilon^\top E\bar\varepsilon)\right]\;\E[x^2],\\
+E^{(\dagger)}_{2,K}
+&:= \E\!\left[(\bar\varepsilon^\top  \overline\Sigma^{-2}\bar\varepsilon)(\bar\varepsilon^\top E\bar\varepsilon)\,z^2\right],\\
+E^{(\dagger)}_{3,K}
+&:= 2\,\E[x]\;\E\!\left[(\bar\varepsilon^\top  \overline\Sigma^{-2}\bar\varepsilon)(\bar\varepsilon^\top E\bar\varepsilon)\,z\right],\\
+E^{(\dagger)}_{4,K}
+&:= 4\,\E\!\left[\E\!\left[(\bar\varepsilon^\top  \overline\Sigma^{-2}\bar\varepsilon)(\bar\varepsilon^\top E\bar\varepsilon)\,y^2\,\middle|\,s_0\right]\right].
+\end{align*}
+Rewrite each term:
+\[
+\E[x]=\mathrm{IS}_{\Sigma_0}(\overline M_{ss}),
+\qquad
+\E[x^2]=\mathrm{IS}_{\Sigma_0}(\overline M_{ss},\overline M_{ss}),
+\]
+\[
+\E\!\left[(\bar\varepsilon^\top  \overline\Sigma^{-2}\bar\varepsilon)(\bar\varepsilon^\top E\bar\varepsilon)\right]
+=\mathrm{IS}_{\overline\Sigma}( \overline\Sigma^{-2},E),
+\]
+\[
+\E\!\left[(\bar\varepsilon^\top  \overline\Sigma^{-2}\bar\varepsilon)(\bar\varepsilon^\top E\bar\varepsilon)\,z\right]
+=\mathrm{IS}_{\overline\Sigma}( \overline\Sigma^{-2},E,\overline M_{ee}),
+\qquad
+\E\!\left[(\bar\varepsilon^\top  \overline\Sigma^{-2}\bar\varepsilon)(\bar\varepsilon^\top E\bar\varepsilon)\,z^2\right]
+=\mathrm{IS}_{\overline\Sigma}( \overline\Sigma^{-2},E,\overline M_{ee},\overline M_{ee}).
+\]
+For the mixed term, with $y^2=\bar\varepsilon^\top X(s_0)\bar\varepsilon$,
+\[
+\E_{\bar\varepsilon}\!\left[(\bar\varepsilon^\top  \overline\Sigma^{-2}\bar\varepsilon)(\bar\varepsilon^\top E\bar\varepsilon)\,y^2\mid s_0\right]
+=\mathrm{IS}_{\overline\Sigma}\!\big( \overline\Sigma^{-2},E,X(s_0)\big),
+\]
+For the mixed term, recall $X(s_0)=\overline M_{se}^\top s_0 s_0^\top \overline M_{se}$ and define
+\[
+U:=\overline M_{se}\overline M_{se}^\top,\qquad
+V:=\overline M_{se}\overline\Sigma\,\overline M_{se}^\top,\qquad
+W:=\overline M_{se}\,\overline\Sigma\,E\,\overline\Sigma\,\overline M_{se}^\top,\qquad
+Z:=\symfun(\overline M_{se}\,E\,\overline\Sigma\,\overline M_{se}^\top).
+\]
+First, by Lemma~\ref{lem:IS_shorthand} ($k=3$) with $\Omega=\overline\Sigma$, $A=\overline\Sigma^{-2}$, $B=E$, $C=X(s_0)$,
+\begin{align*}
+\mathrm{IS}_{\overline\Sigma}(\overline\Sigma^{-2},E,X(s_0))
+&=\tr(\overline\Sigma^{-1})\tr(\overline\Sigma E)\tr(\overline\Sigma X(s_0))
++2\tr(E)\tr(\overline\Sigma X(s_0))
++2\tr(\overline\Sigma E)\tr(X(s_0))\\
+&\quad+2\tr(\overline\Sigma^{-1})\tr(\overline\Sigma E\overline\Sigma X(s_0))
++8\tr(E\overline\Sigma X(s_0)),
+\end{align*}
+and using $\overline\Sigma\,\overline\Sigma^{-2}\,\overline\Sigma=I$ together with
+$\tr(\overline\Sigma X(s_0))=s_0^\top V s_0$, $\tr(X(s_0))=s_0^\top U s_0$,
+$\tr(\overline\Sigma E\overline\Sigma X(s_0))=s_0^\top W s_0$, and $\tr(E\overline\Sigma X(s_0))=s_0^\top Z s_0$,
+we obtain
+\[
+\mathrm{IS}_{\overline\Sigma}(\overline\Sigma^{-2},E,X(s_0))
+=
+\mathrm{IS}_{\overline\Sigma}(\overline\Sigma^{-2},E)\,(s_0^\top V s_0)
++2\,\mathrm{IS}_{\overline\Sigma}(E)\,(s_0^\top U s_0)
++2\,\mathrm{IS}_{\overline\Sigma}(\overline\Sigma^{-2})\,(s_0^\top W s_0)
++8\,(s_0^\top Z s_0).
+\]
+
+Taking expectation over $s_0\sim\mathcal N(0,\Sigma_0)$ gives
+\[
+\E_{s_0}\!\left[\mathrm{IS}_{\overline\Sigma}(\overline\Sigma^{-2},E,X(s_0))\right]
+=
+\mathrm{IS}_{\overline\Sigma}(\overline\Sigma^{-2},E)\,\mathrm{IS}_{\Sigma_0}(V)
++2\,\mathrm{IS}_{\overline\Sigma}(E)\,\mathrm{IS}_{\Sigma_0}(U)
++2\,\mathrm{IS}_{\overline\Sigma}(\overline\Sigma^{-2})\,\mathrm{IS}_{\Sigma_0}(W)
++8\,\mathrm{IS}_{\Sigma_0}(Z).
+\]
+Consequently,
+\[
+E^{(\dagger)}_{4,K}
+=
+4\,\mathrm{IS}_{\overline\Sigma}(\overline\Sigma^{-2},E)\,\mathrm{IS}_{\Sigma_0}(V)
++8\,\mathrm{IS}_{\overline\Sigma}(E)\,\mathrm{IS}_{\Sigma_0}(U)
++8\,\mathrm{IS}_{\overline\Sigma}(\overline\Sigma^{-2})\,\mathrm{IS}_{\Sigma_0}(W)
++32\,\mathrm{IS}_{\Sigma_0}(Z).
+\]
+
+hence
+\begin{equation}\label{eq:dagger-final}
+\begin{aligned}
+(\dagger)
+&=
+\mathrm{IS}_{\overline\Sigma}( \overline\Sigma^{-2},E)\;\mathrm{IS}_{\Sigma_0}(\overline M_{ss},\overline M_{ss})
++\mathrm{IS}_{\overline\Sigma}( \overline\Sigma^{-2},E,\overline M_{ee},\overline M_{ee})\\
+&\quad
++2\,\mathrm{IS}_{\Sigma_0}(\overline M_{ss})\;\mathrm{IS}_{\overline\Sigma}( \overline\Sigma^{-2},E,\overline M_{ee})
++4\,\E_{s_0}\!\left[\mathrm{IS}_{\overline\Sigma}\!\big( \overline\Sigma^{-2},E,X(s_0)\big)\right].
+\end{aligned}
+\end{equation}
+
+Combining \eqref{eq:star-final}, and \eqref{eq:dagger-final} yields the desired
+multi-step expansion of $\E[\|\widehat G_K\|_{\mathrm{F}}^2]$.
+
+% ============================================================
+\paragraph{Proof of $\ell$-part expansion.}
+Then
+\[
+\|\overline\Sigma^{-1/2}\bar\varepsilon\|_2^4
+=
+(\bar\varepsilon^\top \overline\Sigma^{-1} \bar\varepsilon)^2,
+\qquad
+R(\tau)^2=(x+2y+z)^2.
+\]
+As above, odd-moment cancellation removes $xy$ and $yz$, so
+\[
+R(\tau)^2=x^2+z^2+2xz+4y^2.
+\]
+Therefore
+\[
+\E\!\left[(2\|\overline\Sigma^{-1/2}\bar\varepsilon\|_2^4+2mT)\,R(\tau)^2\right]
+=
+2\sum_{i=1}^4 A_i + 2mT\sum_{i=1}^4 B_i,
+\]
+where
+\begin{align*}
+A_1 &:= \E\!\left[(\bar\varepsilon^\top \overline\Sigma^{-1}\bar\varepsilon)^2\,x^2\right]
+     = \E[x^2]\;\E\!\left[(\bar\varepsilon^\top \overline\Sigma^{-1}\bar\varepsilon)^2\right],\\
+A_2 &:= \E\!\left[(\bar\varepsilon^\top \overline\Sigma^{-1}\bar\varepsilon)^2\,z^2\right],\\
+A_3 &:= 2\,\E\!\left[(\bar\varepsilon^\top \overline\Sigma^{-1}\bar\varepsilon)^2\,x z\right]
+     = 2\,\E[x]\;\E\!\left[(\bar\varepsilon^\top \overline\Sigma^{-1}\bar\varepsilon)^2\,z\right],\\
+A_4 &:= 4\,\E\!\left[(\bar\varepsilon^\top \overline\Sigma^{-1}\bar\varepsilon)^2\,y^2\right]
+     = 4\,\E_{s_0}\!\left[\mathrm{IS}_{\overline\Sigma}(\overline\Sigma^{-1},\overline\Sigma^{-1},X(s_0))\right],
+\end{align*}
+and
+\begin{align*}
+B_1 &:= \E[x^2],\qquad
+B_2 := \E[z^2],\qquad
+B_3 := 2\,\E[xz]=2\,\E[x]\E[z],\qquad
+B_4 := 4\,\E[y^2].
+\end{align*}
+
+Each term can be written using $\mathrm{IS}$ shorthand:
+\[
+\E[x]=\mathrm{IS}_{\Sigma_0}(\overline M_{ss}),
+\qquad
+\E[x^2]=\mathrm{IS}_{\Sigma_0}(\overline M_{ss},\overline M_{ss}),
+\]
+\[
+\E[z]=\mathrm{IS}_{\overline\Sigma}(\overline M_{ee}),
+\qquad
+\E[z^2]=\mathrm{IS}_{\overline\Sigma}(\overline M_{ee},\overline M_{ee}),
+\]
+\[
+\E[y^2]=\mathrm{IS}_{\Sigma_0}(V),
+\quad\text{where }V:=\overline M_{se}\overline\Sigma \overline M_{se}^\top.
+\]
+Moreover,
+\[
+\E\!\left[(\bar\varepsilon^\top \overline\Sigma^{-1}\bar\varepsilon)^2\right]=\mathrm{IS}_{\overline\Sigma}(\overline\Sigma^{-1},\overline\Sigma^{-1}),
+\]
+\[
+\E\!\left[(\bar\varepsilon^\top \overline\Sigma^{-1}\bar\varepsilon)^2\,z\right]
+=\mathrm{IS}_{\overline\Sigma}(\overline\Sigma^{-1},\overline\Sigma^{-1},\overline M_{ee}),
+\qquad
+\E\!\left[(\bar\varepsilon^\top \overline\Sigma^{-1}\bar\varepsilon)^2\,z^2\right]
+=\mathrm{IS}_{\overline\Sigma}(\overline\Sigma^{-1},\overline\Sigma^{-1},\overline M_{ee},\overline M_{ee}).
+\]
+
+\noindent\textbf{Term $A_4$ ($y^2$-part).}
+Applying Lemma~\ref{lem:IS_shorthand} ($k=3$) with $\Omega=\overline\Sigma$, $A=B=\overline\Sigma^{-1}$, $C=X(s_0)$ and using
+$\overline\Sigma\,\overline\Sigma^{-1}=I$, we obtain
+\[
+\mathrm{IS}_{\overline\Sigma}(\overline\Sigma^{-1},\overline\Sigma^{-1},X(s_0))
+=\big(d^2+6d+8\big)\,\tr\!\big(\overline\Sigma\,X(s_0)\big)
+=(d+2)(d+4)\,\tr\!\big(\overline\Sigma\,X(s_0)\big),
+\qquad d:=mT.
+\]
+Moreover,
+\[
+\tr(\overline\Sigma\,X(s_0))
+=\tr\!\big(s_0 s_0^\top \overline M_{se}\overline\Sigma\,\overline M_{se}^\top\big)
+=s_0^\top V s_0,
+\qquad
+V:=\overline M_{se}\overline\Sigma\,\overline M_{se}^\top,
+\]
+hence $\E_{s_0}[\tr(\overline\Sigma\,X(s_0))]=\tr(\Sigma_0 V)=\mathrm{IS}_{\Sigma_0}(V)$.
+Therefore,
+\[
+A_4
+=4(d+2)(d+4)\,\mathrm{IS}_{\Sigma_0}(V),
+\qquad d=mT.
+\]
+
+Hence,
+\begin{equation}\label{eq:Ell-final}
+\begin{aligned}
+\E\!\left[\|\widehat G_\ell\|_2^2\right]
+&\le
+T\Bigg(
+2\Big[
+\mathrm{IS}_{\Sigma_0}(\overline M_{ss},\overline M_{ss})\;\mathrm{IS}_{\overline\Sigma}(\overline\Sigma^{-1},\overline\Sigma^{-1})
++\mathrm{IS}_{\overline\Sigma}(\overline\Sigma^{-1},\overline\Sigma^{-1},\overline M_{ee},\overline M_{ee})\\
+&\qquad\qquad
++2\,\mathrm{IS}_{\Sigma_0}(\overline M_{ss})\;\mathrm{IS}_{\overline\Sigma}(\overline\Sigma^{-1},\overline\Sigma^{-1},\overline M_{ee})
++4(d+2)(d+4)\,\mathrm{IS}_{\Sigma_0}(V)
+\Big]\\
+&\qquad
++2mT\Big[
+\mathrm{IS}_{\Sigma_0}(\overline M_{ss},\overline M_{ss})
++\mathrm{IS}_{\overline\Sigma}(\overline M_{ee},\overline M_{ee})
++2\,\mathrm{IS}_{\Sigma_0}(\overline M_{ss})\,\mathrm{IS}_{\overline\Sigma}(\overline M_{ee})\\
+&\qquad\qquad
++4\,\mathrm{IS}_{\Sigma_0}(V)
+\Big]
+\Bigg),
+\end{aligned}
+\end{equation}
+where $X(s_0):=\overline M_{se}^\top s_0 s_0^\top \overline M_{se}$ and $V:=\overline M_{se}\overline\Sigma \overline M_{se}^\top$.
+
+\end{proof}
+
+
+\section{Proof of Theorem \ref{thm:lqr-lifted-state-maps-bound}}
+\label{sec:app-proof-lqr-lifted-state-maps-bound}
+
+\begin{proof}
+Recall that $\|\mathcal F_S\|_2^2=\lambda_{\max}(\mathcal F_S^\top \mathcal F_S)$. Since
+\[
+\mathcal F_S=\begin{bmatrix}I & F & \cdots & F^{T-1}\end{bmatrix}^\top,
+\]
+we have
+\[
+\mathcal F_S^\top \mathcal F_S=\sum_{t=0}^{T-1}(F^t)^\top F^t.
+\]
+
+\paragraph{Lower bound.}
+For any fixed $t\in\{0,\dots,T-1\}$,
+\[
+\mathcal F_S^\top \mathcal F_S
+=\sum_{k=0}^{T-1}(F^k)^\top F^k
+\succeq (F^t)^\top F^t.
+\]
+Taking $\lambda_{\max}(\cdot)$ preserves the Loewner order, hence
+\[
+\|\mathcal F_S\|_2^2
+=\lambda_{\max}(\mathcal F_S^\top \mathcal F_S)
+\ge \lambda_{\max}\big((F^t)^\top F^t\big)
+=\|F^t\|_2^2.
+\]
+Maximizing over $t$ yields
+$\max_{0\le t\le T-1}\|F^t\|_2^2 \le \|\mathcal F_S\|_2^2$.
+
+\paragraph{Upper bound.}
+For any unit vector $v$,
+\[
+v^\top(\mathcal F_S^\top \mathcal F_S)v
+=\sum_{t=0}^{T-1}\|F^t v\|_2^2
+\le \sum_{t=0}^{T-1}\|F^t\|_2^2\,\|v\|_2^2
+=\sum_{t=0}^{T-1}\|F^t\|_2^2.
+\]
+Taking the supremum over $\|v\|_2=1$ gives
+\[
+\|\mathcal F_S\|_2^2
+=\sup_{\|v\|_2=1} v^\top(\mathcal F_S^\top \mathcal F_S)v
+\le \sum_{t=0}^{T-1}\|F^t\|_2^2.
+\]
+\end{proof}
+
+
