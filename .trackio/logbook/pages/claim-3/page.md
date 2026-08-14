@@ -7,4 +7,6 @@
 -->
 # Claim 3 — VERIFIED
 
+Status: `VERIFIED_SCOPED_WITH_PROTOCOL_LIMITS`.
+
 For 48 cubic-dynamics/tanh-policy quadrature cells, the conditional fourth-moment mean-policy and log-std bounds have zero violations. Removing the required `||Sigma^-1||^2` factor fails 26/48 cells.

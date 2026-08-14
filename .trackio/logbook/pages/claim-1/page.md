@@ -7,4 +7,6 @@
 -->
 # Claim 1 — VERIFIED
 
+Status: `VERIFIED_SCOPED`.
+
 The one-step closed form matches degree-eight Gaussian quadrature across 12 covariance cells (maximum mean error `9.72e-15`; maximum second-moment relative error `1.10e-15`). A 13-system, one- through five-step audit agrees with independently finite-differenced objective gradients (maximum relative error `1.70e-10`).

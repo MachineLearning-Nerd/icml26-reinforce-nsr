@@ -10,11 +10,8 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2]
-PINS = {
-    "sections/lqg.tex": "424e862b4297defbfcacf75ffef81b0381ef5ee5b6bf4b86059edbef85c9c7fb",
-    "sections/nonlinear_new.tex": "558392eb62a93ec68ecebf94db516ab2dffdc9310905c8a1724c5185b6edfb1b",
-    "sections/app-proof-nonlinear-upperbound.tex": "11ece2dad7fac254e2aa0a2439caee4bc5d8e545cadb9b20f0eeb4b3c4ecbe83",
-}
+MANIFEST = json.loads((ROOT / "sources.json").read_text())
+PINS = MANIFEST["anchors"]
 
 
 def isserlis(cov: np.ndarray, *matrices: np.ndarray) -> float:

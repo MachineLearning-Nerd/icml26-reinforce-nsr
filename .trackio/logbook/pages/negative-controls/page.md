@@ -1,5 +1,7 @@
 # Negative controls
 
+Status: supporting controls for the scoped gate.
+
 
 ---
 <!-- trackio-cell

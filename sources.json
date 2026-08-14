@@ -1,8 +1,16 @@
 {
   "paper": {
+    "title": "Non-Uniform Noise-to-Signal Ratio in the REINFORCE Policy-Gradient Estimator",
+    "authors": [
+      "Haoyu Han",
+      "Heng Yang"
+    ],
     "openreview_id": "Ol99zoW31J",
     "arxiv_id": "2602.01460v3",
-    "arxiv_source_sha256": "de620c3c2a99639010e9338e336ebe4ed79cbdf263761efb9eabc71322a9152d"
+    "arxiv_source_sha256": "de620c3c2a99639010e9338e336ebe4ed79cbdf263761efb9eabc71322a9152d",
+    "source_root": "source/arxiv",
+    "source_tree_file_count": 38,
+    "source_tree_sha256": "f9cec0b849755711b619011ffd8638985638d89e5dc5fc3d4b8c116c030b2c6d"
   },
   "anchors": {
     "main.tex": "e8ef3aebb0e9283c93aca97c350893f4cf5dffea8ce32baa0c0762e275c5f27c",

@@ -1,0 +1,43 @@
+{
+  "paper": "Ol99zoW31J",
+  "gate_version": "scoped-v2",
+  "status": "SCOPED_PASS",
+  "strict_status": "NOT_READY",
+  "overall_status": "VERIFIED_SCOPED_WITH_UNREPRODUCED_EXPERIMENTS",
+  "tests_passed": true,
+  "publication_gate_passed": true,
+  "claims": {
+    "C1": {
+      "status": "VERIFIED_SCOPED",
+      "evidence": "12 one-step moment cells and 13 finite-horizon systems with independent checks"
+    },
+    "C2": {
+      "status": "VERIFIED_SCOPED",
+      "evidence": "3,721-cell NSR landscape and an 80-point small-policy-noise blow-up sweep"
+    },
+    "C3": {
+      "status": "VERIFIED_SCOPED_WITH_PROTOCOL_LIMITS",
+      "evidence": "48 cubic-dynamics/tanh-policy fourth-moment-bound cells with mutation control"
+    }
+  },
+  "controls": {
+    "source_anchor_checks": true,
+    "source_tree_file_count": 38,
+    "source_tree_sha256": "f9cec0b849755711b619011ffd8638985638d89e5dc5fc3d4b8c116c030b2c6d",
+    "degree_four_control_rejected": true,
+    "inverse_covariance_mutation_detected": true
+  },
+  "evidence_bundle_sha256": "ce0c4864978f9d009cd9f45283e9da66587adbf945637a3d62a6b952a571b9ee",
+  "source_anchor_sha256": {
+    "main.tex": "e8ef3aebb0e9283c93aca97c350893f4cf5dffea8ce32baa0c0762e275c5f27c",
+    "sections/lqg.tex": "424e862b4297defbfcacf75ffef81b0381ef5ee5b6bf4b86059edbef85c9c7fb",
+    "sections/nonlinear_new.tex": "558392eb62a93ec68ecebf94db516ab2dffdc9310905c8a1724c5185b6edfb1b",
+    "sections/app-proof-nonlinear-upperbound.tex": "11ece2dad7fac254e2aa0a2439caee4bc5d8e545cadb9b20f0eeb4b3c4ecbe83"
+  },
+  "score_forecast": null,
+  "limitations": [
+    "The verifier is clean-room; no author-code parity is claimed.",
+    "Optimization trajectories, sampled RL rollouts, and broader polynomial/neural experiments are outside the current gate.",
+    "The gate covers the three declared finite contracts, not every theorem or rendered figure."
+  ]
+}

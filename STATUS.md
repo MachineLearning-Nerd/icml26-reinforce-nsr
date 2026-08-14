@@ -1,17 +1,34 @@
 # Status — Ol99zoW31J
 
-Claimed on 2026-07-20 after a fresh live-claim and source audit. The current
-jury contract has three claims / six possible points. Primary arXiv v3 source
-is vendored and hash-pinned; no author implementation is advertised in the
-source, so all evidence will be clearly labeled clean-room.
+## Identity
 
-Completed: the independent Gaussian-moment, NSR-landscape, and nonlinear
-fourth-moment-bound verifiers all passed. The metadata-bound local gate passed
-with four tests and a 12-record hash-bound evidence bundle. The public GitHub
-repository is `https://github.com/MachineLearning-Nerd/icml26-repro-Ol99zoW31J-reinforce-nsr`
-at initial handoff commit `0f132e889a09e4e7bcf22bd1dd27e99e091bf280`.
+- Paper: *Non-Uniform Noise-to-Signal Ratio in the REINFORCE Policy-Gradient Estimator*
+- Authors: Haoyu Han and Heng Yang
+- arXiv: `2602.01460v3`
+- OpenReview: `Ol99zoW31J`
+- Repository: `https://github.com/MachineLearning-Nerd/icml26-reinforce-nsr`
 
-Publication handoff completed: canonical backlog entry 59 is `Ol99zoW31J /
-icml26-repro-Ol99zoW31J-reinforce-nsr`. The singleton shared drain exclusively
-owns Hugging Face publication. Next: await the published-space verdict and
-revise only with new full-scale evidence if needed.
+## Gate state
+
+`SCOPED_PASS` / `VERIFIED_SCOPED_WITH_UNREPRODUCED_EXPERIMENTS`
+
+The exact-moment, finite-horizon, NSR-landscape, and nonlinear-bound checks
+pass. The strict paper-level status is `NOT_READY` because optimization
+trajectory figures, sampled RL rollouts, and the broader polynomial/neural
+experimental scope are not reproduced here. No score forecast is made.
+
+## Evidence
+
+- C1: 12 one-step cells and 13 finite-horizon systems, checked by independent
+  Wick moments, degree-8 quadrature, covariance recursion, and finite differences.
+- C2: 3,721 NSR landscape cells and an 80-point small-policy-noise sweep.
+- C3: 48 nonlinear cubic/tanh cells with a retained inverse-covariance mutation
+  control.
+- Focused tests: `repro/tests/test_verifier.py`.
+- Canonical gate: `publication_gate.json` and `outputs/publication_gate.json`.
+
+## Provenance
+
+The arXiv v3 source is vendored under `source/arxiv/` and its anchor hashes are
+recorded in `sources.json`. The verifier is clean-room and does not rely on
+private Trackio metadata, a queue handoff, or absolute local paths.
